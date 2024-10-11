@@ -1,35 +1,30 @@
-package com.arkea.asyncapi.v2;
+package com.arkea.asyncapi.v3;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import com.arkea.asyncapi.v3.models.AsyncAPI;
+import com.arkea.asyncapi.v3.parser.AsyncAPIV3Parser;
+import com.arkea.asyncapi.v3.parser.models.AsyncParseResult;
+import com.arkea.asyncapi.v3.parser.models.ParseOptions;
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
-//import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import com.arkea.asyncapi.v2.models.AsyncAPI;
-import com.arkea.asyncapi.v2.parser.AsyncAPIV2Parser;
-import com.arkea.asyncapi.v2.parser.models.AsyncParseResult;
-import com.arkea.asyncapi.v2.parser.models.ParseOptions;
-
-public class AsycnApiV2ParserTest {
+public class AsycnApiV3ParserTest {
 
 	@Test
-	public void testMinimalAsyncAPIV2Parser() {
-		AsyncAPIV2Parser asyncAPIV2Parser = new AsyncAPIV2Parser();
+	public void testMinimalAsyncAPIV3Parser() {
+		AsyncAPIV3Parser asyncAPIV3Parser = new AsyncAPIV3Parser();
 		ParseOptions options = new ParseOptions();
 
 		InputStream myStream = null;
 		String myString = null;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			myStream = classloader.getResourceAsStream("v2/asyncapi.yaml");
+			myStream = classloader.getResourceAsStream("v3/asyncapi.yaml");
 
 			myString = IOUtils.toString(myStream, Charset.defaultCharset()).trim();
 		} catch (Exception e) {			
@@ -42,22 +37,22 @@ public class AsycnApiV2ParserTest {
 		}
 
 		options.setResolve(true);
-		AsyncParseResult parseResult = asyncAPIV2Parser.readContents(myString);
+		AsyncParseResult parseResult = asyncAPIV3Parser.readContents(myString);
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
 	}
 
 	@Test
-	public void testM2AsyncAPIV2Parser() {
-		AsyncAPIV2Parser asyncAPIV2Parser = new AsyncAPIV2Parser();
+	public void testM2AsyncAPIV3Parser() {
+		AsyncAPIV3Parser asyncAPIV3Parser = new AsyncAPIV3Parser();
 		ParseOptions options = new ParseOptions();
 
 		InputStream myStream = null;
 		String myString = null;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			myStream = classloader.getResourceAsStream("v2/application-headers.yml");
+			myStream = classloader.getResourceAsStream("v3/application-headers.yml");
 			myString = IOUtils.toString(myStream, Charset.defaultCharset()).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -72,7 +67,7 @@ public class AsycnApiV2ParserTest {
 		
 
 		options.setResolve(true);
-		AsyncParseResult parseResult = asyncAPIV2Parser.readContents(myString);
+		AsyncParseResult parseResult = asyncAPIV3Parser.readContents(myString);
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
@@ -80,15 +75,15 @@ public class AsycnApiV2ParserTest {
 	}
 
 	@Test
-	public void testJsonAsyncAPIV2Parser() {
-		AsyncAPIV2Parser asyncAPIV2Parser = new AsyncAPIV2Parser();
+	public void testJsonAsyncAPIV3Parser() {
+		AsyncAPIV3Parser asyncAPIV3Parser = new AsyncAPIV3Parser();
 		ParseOptions options = new ParseOptions();
 
 		InputStream myStream = null;
 		String myString = null;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			myStream = classloader.getResourceAsStream("v2/TestJson.json");
+			myStream = classloader.getResourceAsStream("v3/TestJson.json");
 			myString = IOUtils.toString(myStream, Charset.defaultCharset()).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,22 +95,22 @@ public class AsycnApiV2ParserTest {
 		}
 
 		options.setResolve(true);
-		AsyncParseResult parseResult = asyncAPIV2Parser.readContents(myString);
+		AsyncParseResult parseResult = asyncAPIV3Parser.readContents(myString);
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
 	}
 
 	@Test
-	public void testCloudEventsAsyncAPIV2Parser() {
-		AsyncAPIV2Parser asyncAPIV2Parser = new AsyncAPIV2Parser();
+	public void testCloudEventsAsyncAPIV3Parser() {
+		AsyncAPIV3Parser asyncAPIV3Parser = new AsyncAPIV3Parser();
 		ParseOptions options = new ParseOptions();
 
 		InputStream myStream = null;
 		String myString = null;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			myStream = classloader.getResourceAsStream("v2/cloudEventsTest.yml");
+			myStream = classloader.getResourceAsStream("v3/cloudEventsTest.yml");
 			myString = IOUtils.toString(myStream, Charset.defaultCharset()).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -127,7 +122,7 @@ public class AsycnApiV2ParserTest {
 		}
 
 		options.setResolve(true);
-		AsyncParseResult parseResult = asyncAPIV2Parser.readContents(myString);
+		AsyncParseResult parseResult = asyncAPIV3Parser.readContents(myString);
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
@@ -136,15 +131,15 @@ public class AsycnApiV2ParserTest {
 
 	}
 	@Test
-	public void testOneOfAsyncAPIV2Parser() {
-		AsyncAPIV2Parser asyncAPIV2Parser = new AsyncAPIV2Parser();
+	public void testOneOfAsyncAPIV3Parser() {
+		AsyncAPIV3Parser asyncAPIV3Parser = new AsyncAPIV3Parser();
 		ParseOptions options = new ParseOptions();
 
 		InputStream myStream = null;
 		String myString = null;
 		try {
 			ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-			myStream = classloader.getResourceAsStream("v2/oneof.yml");
+			myStream = classloader.getResourceAsStream("v3/oneof.yml");
 			myString = IOUtils.toString(myStream, Charset.defaultCharset()).trim();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -156,7 +151,7 @@ public class AsycnApiV2ParserTest {
 		}
 
 		options.setResolve(true);
-		AsyncParseResult parseResult = asyncAPIV2Parser.readContents(myString);
+		AsyncParseResult parseResult = asyncAPIV3Parser.readContents(myString);
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
