@@ -13,10 +13,14 @@ import com.arkea.asyncapi.v3.models.security.SecurityRequirement;
 
 public class Server {
 
-    /** REQUIRED. A URL to the target host. This URL supports Server Variables and MAY be relative,
-     *  to indicate that the host location is relative to the location where the AsyncAPI document is being served.
-     *   Variable substitutions will be made when a variable is named in {brackets}. */
-    private String url = null;
+    /** REQUIRED. The server host name. It MAY include the port.
+     * This field supports Server Variables.
+     * Variable substitutions will be made when a variable is named in {braces}. */
+    private String host = null;
+
+    /** The path to a resource in the host. This field supports Server Variables.
+     *  Variable substitutions will be made when a variable is named in {brackets}. */
+    private String pathname = null;
 
     /** REQUIRED. The protocol this URL supports for connection. Supported protocol include, but are not limited to:
      *  amqp, amqps, http, https, jms, kafka, kafka-secure, mqtt, secure-mqtt, stomp, stomps, ws, wss, mercure. */
@@ -76,21 +80,40 @@ public class Server {
     }
 
     /**
-     * returns the url property from a Server instance.
+     * returns the host property from a Server instance.
      *
-     * @return String url
+     * @return String host
      **/
 
-    public String getUrl() {
-        return this.url;
+    public String getHost() {
+        return this.host;
     }
 
-    public void setUrl(final String url) {
-        this.url = url;
+    public void setHost(final String host) {
+        this.host = host;
     }
 
-    public Server url(final String url) {
-        this.url = url;
+    public Server host(final String host) {
+        this.host = host;
+        return this;
+    }
+
+    /**
+     * returns the pathname property from a Server instance.
+     *
+     * @return String pathname
+     **/
+
+    public String getPathname() {
+        return this.pathname;
+    }
+
+    public void setPathname(final String pathname) {
+        this.pathname = pathname;
+    }
+
+    public Server pathname(final String pathname) {
+        this.pathname = pathname;
         return this;
     }
 
@@ -157,7 +180,14 @@ public class Server {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.url, this.protocol, this.protocolVersion, this.description, this.variables, this.extensions, this.security);
+        return Objects.hash(this.host,
+                this.pathname,
+                this.protocol,
+                this.protocolVersion,
+                this.description,
+                this.variables,
+                this.extensions,
+                this.security);
     }
 
     @Override
@@ -214,11 +244,18 @@ public class Server {
         } else if (!this.security.equals(other.security)) {
             return false;
         }
-        if (this.url == null) {
-            if (other.url != null) {
+        if (this.host == null) {
+            if (other.host != null) {
                 return false;
             }
-        } else if (!this.url.equals(other.url)) {
+        } else if (!this.host.equals(other.host)) {
+            return false;
+        }
+        if (this.pathname == null) {
+            if (other.pathname != null) {
+                return false;
+            }
+        } else if (!this.pathname.equals(other.pathname)) {
             return false;
         }
         if (this.variables == null) {
@@ -236,7 +273,8 @@ public class Server {
         final StringBuilder sb = new StringBuilder();
         sb.append("class Server {\n");
 
-        sb.append("    url: ").append(toIndentedString(this.url)).append("\n");
+        sb.append("    host: ").append(toIndentedString(this.host)).append("\n");
+        sb.append("    pathname: ").append(toIndentedString(this.pathname)).append("\n");
         sb.append("    protocol: ").append(toIndentedString(this.protocol)).append("\n");
         sb.append("    protocolVersion: ").append(toIndentedString(this.protocolVersion)).append("\n");
         sb.append("    description: ").append(toIndentedString(this.description)).append("\n");

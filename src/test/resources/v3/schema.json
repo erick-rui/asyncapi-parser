@@ -17,7 +17,7 @@
     "asyncapi": {
       "type": "string",
       "enum": [
-        "2.0.0"
+        "3.0.0"
       ],
       "description": "The AsyncAPI specification version of this document."
     },
@@ -163,7 +163,7 @@
       "type": "object",
       "description": "An object representing a Server.",
       "required": [
-        "url",
+        "host",
         "protocol"
       ],
       "additionalProperties": false,
@@ -173,7 +173,10 @@
         }
       },
       "properties": {
-        "url": {
+        "host": {
+          "type": "string"
+        },
+        "pathname": {
           "type": "string"
         },
         "description": {

@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 id: 'urn:rpc:example:client'
 defaultContentType: application/json
 
@@ -9,7 +9,7 @@ info:
 
 servers:
   production:
-    url: rabbitmq.example.org
+    host: rabbitmq.example.org
     protocol: amqp
 
 channels:

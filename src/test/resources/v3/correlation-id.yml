@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 info:
   title: Correlation ID Example
   version: '1.0.0'
@@ -9,7 +9,7 @@ info:
 
 servers:
   production:
-    url: test.mosquitto.org:{port}
+    host: test.mosquitto.org:{port}
     protocol: mqtt
     description: Test broker
     variables:

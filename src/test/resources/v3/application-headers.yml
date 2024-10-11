@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 info:
   title: Application Headers example
   version: '1.0.0'
@@ -9,7 +9,7 @@ info:
 
 servers:
   production:
-    url: http://test.mosquitto.org:{port}
+    host: http://test.mosquitto.org:{port}
     protocol: mqtt
     description: Test broker
     variables:

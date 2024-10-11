@@ -73,7 +73,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> CHANNEL_KEYS = new LinkedHashSet<>(Arrays.asList("description", "subscribe", "publish", "parameters", "bindings", "extensions"));
 
-    protected static Set<String> SERVER_KEYS = new LinkedHashSet<>(Arrays.asList("url", "protocol", "protocolVersion", "description", "variables", "security"));
+    protected static Set<String> SERVER_KEYS = new LinkedHashSet<>(Arrays.asList("host","pathname", "protocol", "protocolVersion", "description", "variables", "security"));
 
     protected static Set<String> SERVER_BINDING_MQTT_KEYS = new LinkedHashSet<>(Arrays.asList("clientId",
                     "cleanSession", "lastWill", "lastWill.topic", "lastWill.qos", "lastWill.retain", "keepAlive", "bindingVersion", "extensions"));
@@ -177,7 +177,7 @@ public class AsyncAPIDeserializer {
             // required
             String value = getString("asyncapi", rootNode, true, location, result);
             // we don't even try if the version isn't there
-            if (value == null || !value.startsWith("2.0")) {
+            if (value == null || !value.startsWith("3.0")) {
                 return null;
             }
             asyncAPI.setAsyncapi(value);
@@ -436,7 +436,7 @@ public class AsyncAPIDeserializer {
                     servers.put(entry.getKey(), server);
                 } else {
                     final Server defaultServer = new Server();
-                    defaultServer.setUrl("/");
+                    defaultServer.setHost("/");
                     servers.put("null", defaultServer);
                 }
             }
@@ -451,10 +451,16 @@ public class AsyncAPIDeserializer {
 
         final Server server = new Server();
 
-        // private String url = null;
-        String value = getString("url", obj, true, location, result);
+        // private String host = null;
+        String value = getString("host", obj, true, location, result);
         if (StringUtils.isNotBlank(value)) {
-            server.setUrl(value);
+            server.setHost(value);
+        }
+
+        // private String pathname = null;
+        value = getString("pathname", obj, false, location, result);
+        if (StringUtils.isNotBlank(value)) {
+            server.setPathname(value);
         }
 
         // private String protocol = null;

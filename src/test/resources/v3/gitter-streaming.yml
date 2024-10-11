@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 id: 'urn:com:gitter:streaming:api'
 info:
   title: Gitter Streaming API
@@ -6,7 +6,8 @@ info:
 
 servers:
   production:
-    url: https://stream.gitter.im/v1
+    host: https://stream.gitter.im
+    pathname: /v1
     protocol: https
     protocolVersion: '1.1'
     security:

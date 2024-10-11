@@ -18,7 +18,7 @@ import com.arkea.asyncapi.v2.parser.AsyncAPIV2Parser;
 import com.arkea.asyncapi.v2.parser.models.AsyncParseResult;
 import com.arkea.asyncapi.v2.parser.models.ParseOptions;
 
-public class AsycnApiV2ParserTest {
+public class AsyncApiV2ParserTest {
 
 	@Test
 	public void testMinimalAsyncAPIV2Parser() {

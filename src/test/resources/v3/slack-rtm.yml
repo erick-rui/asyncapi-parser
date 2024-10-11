@@ -1,4 +1,4 @@
-asyncapi: '2.0.0'
+asyncapi: '3.0.0'
 id: 'urn:com:slack:rtm:api'
 info:
   title: Slack Real Time Messaging API
@@ -6,7 +6,8 @@ info:
 
 servers:
   production:
-    url: https://slack.com/api/rtm.connect
+    host: https://slack.com
+    pathname: /api/rtm.connect
     protocol: https
     protocolVersion: '1.1'
     security:

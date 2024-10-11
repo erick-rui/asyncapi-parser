@@ -1,4 +1,4 @@
-asyncapi: 2.0.0-rc1
+asyncapi: 3.0.0-rc1
 id: urn:com.asyncapi.examples.user
 defaultContentType: application/json
 info:

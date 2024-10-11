@@ -13,7 +13,7 @@ import java.nio.charset.Charset;
 
 import static org.junit.Assert.*;
 
-public class AsycnApiV3ParserTest {
+public class AsyncApiV3ParserTest {
 
 	@Test
 	public void testMinimalAsyncAPIV3Parser() {

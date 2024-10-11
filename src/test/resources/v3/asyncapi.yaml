@@ -1,4 +1,4 @@
-asyncapi: 2.0.0
+asyncapi: 3.0.0
 info:
   title: Streetlights API
   version: '1.0.0'
@@ -22,7 +22,7 @@ info:
 
 servers:
   production:
-    url: api.streetlights.smartylighting.com:{port}
+    host: api.streetlights.smartylighting.com:{port}
     protocol: mqtt
     description: Test broker
     variables:
