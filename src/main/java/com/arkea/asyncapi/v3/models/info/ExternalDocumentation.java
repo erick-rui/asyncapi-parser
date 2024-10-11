@@ -1,4 +1,4 @@
-package com.arkea.asyncapi.v3.models;
+package com.arkea.asyncapi.v3.models.info;
 
 import java.util.Objects;
 

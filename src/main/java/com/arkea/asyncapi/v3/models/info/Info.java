@@ -32,6 +32,9 @@ public class Info {
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
     private java.util.Map<String, Object> extensions = null;
 
+    /** Additional external documentation. */
+    private ExternalDocumentation externalDocs = null;
+
 
     /** The common x-view extension required by asyncapi-generator**/     
     @JsonProperty("x-view")
@@ -260,6 +263,25 @@ public class Info {
         return this;
     }
 
+    /**
+     * returns the externalDocs property from a AsyncAPI instance.
+     *
+     * @return ExternalDocumentation externalDocs
+     **/
+
+    public ExternalDocumentation getExternalDocs() {
+        return this.externalDocs;
+    }
+
+    public void setExternalDocs(final ExternalDocumentation externalDocs) {
+        this.externalDocs = externalDocs;
+    }
+
+    public Info externalDocs(final ExternalDocumentation externalDocs) {
+        this.externalDocs = externalDocs;
+        return this;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -275,12 +297,13 @@ public class Info {
                         Objects.equals(this.contact, info.contact) &&
                         Objects.equals(this.license, info.license) &&
                         Objects.equals(this.version, info.version) &&
-                        Objects.equals(this.extensions, info.extensions);
+                        Objects.equals(this.extensions, info.extensions) &&
+                        Objects.equals(this.externalDocs, info.externalDocs);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.title, this.description, this.termsOfService, this.contact, this.license, this.version, this.extensions);
+        return Objects.hash(this.title, this.description, this.termsOfService, this.contact, this.license, this.version, this.extensions, this.externalDocs);
     }
 
     @Override
@@ -294,6 +317,7 @@ public class Info {
         sb.append("    contact: ").append(toIndentedString(this.contact)).append("\n");
         sb.append("    license: ").append(toIndentedString(this.license)).append("\n");
         sb.append("    version: ").append(toIndentedString(this.version)).append("\n");
+        sb.append("    externalDocs: ").append(toIndentedString(this.externalDocs)).append("\n");
         sb.append("}");
         return sb.toString();
     }

@@ -1,6 +1,6 @@
 package com.arkea.asyncapi.v3.models.media;
 
-import com.arkea.asyncapi.v3.models.ExternalDocumentation;
+import com.arkea.asyncapi.v3.models.info.ExternalDocumentation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

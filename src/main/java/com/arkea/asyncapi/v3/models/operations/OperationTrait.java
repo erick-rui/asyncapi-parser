@@ -3,7 +3,7 @@ package com.arkea.asyncapi.v3.models.operations;
 import java.util.List;
 import java.util.Map;
 
-import com.arkea.asyncapi.v3.models.ExternalDocumentation;
+import com.arkea.asyncapi.v3.models.info.ExternalDocumentation;
 import com.arkea.asyncapi.v3.models.tags.Tag;
 
 /**

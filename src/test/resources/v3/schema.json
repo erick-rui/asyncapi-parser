@@ -50,9 +50,6 @@
         "$ref": "#/definitions/tag"
       },
       "uniqueItems": true
-    },
-    "externalDocs": {
-      "$ref": "#/definitions/externalDocs"
     }
   },
   "definitions": {
@@ -107,6 +104,9 @@
         },
         "license": {
           "$ref": "#/definitions/license"
+        },
+        "externalDocs": {
+          "$ref": "#/definitions/externalDocs"
         }
       }
     },

@@ -52,9 +52,6 @@ public class AsyncAPI {
     /** A list of tags used by the specification with additional metadata. Each tag name in the list MUST be unique. */
     private List<Tag> tags = null;
 
-    /** Additional external documentation. */
-    private ExternalDocumentation externalDocs = null;
-
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
     private Map<String, Object> extensions = null;
@@ -96,25 +93,6 @@ public class AsyncAPI {
 
     public AsyncAPI info(final Info info) {
         this.info = info;
-        return this;
-    }
-
-    /**
-     * returns the externalDocs property from a AsyncAPI instance.
-     *
-     * @return ExternalDocumentation externalDocs
-     **/
-
-    public ExternalDocumentation getExternalDocs() {
-        return this.externalDocs;
-    }
-
-    public void setExternalDocs(final ExternalDocumentation externalDocs) {
-        this.externalDocs = externalDocs;
-    }
-
-    public AsyncAPI externalDocs(final ExternalDocumentation externalDocs) {
-        this.externalDocs = externalDocs;
         return this;
     }
 
@@ -270,7 +248,6 @@ public class AsyncAPI {
         return Objects.equals(this.asyncapi, asyncAPI.asyncapi) &&
                         Objects.equals(this.id, asyncAPI.id) &&
                         Objects.equals(this.info, asyncAPI.info) &&
-                        Objects.equals(this.externalDocs, asyncAPI.externalDocs) &&
                         Objects.equals(this.servers, asyncAPI.servers) &&
                         Objects.equals(this.defaultContentType, asyncAPI.defaultContentType) &&
                         Objects.equals(this.channels, asyncAPI.channels) &&
@@ -281,7 +258,7 @@ public class AsyncAPI {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.asyncapi, this.id, this.info, this.externalDocs, this.servers, this.defaultContentType, this.channels,
+        return Objects.hash(this.asyncapi, this.id, this.info, this.servers, this.defaultContentType, this.channels,
                         this.// security,
                                         tags,
                         this.// paths,
@@ -297,7 +274,6 @@ public class AsyncAPI {
         sb.append("    asyncapi: ").append(toIndentedString(this.asyncapi)).append("\n");
         sb.append("    id: ").append(toIndentedString(this.id)).append("\n");
         sb.append("    info: ").append(toIndentedString(this.info)).append("\n");
-        sb.append("    externalDocs: ").append(toIndentedString(this.externalDocs)).append("\n");
         sb.append("    servers: ").append(toIndentedString(this.servers)).append("\n");
         sb.append("    defaultContentType: ").append(toIndentedString(this.defaultContentType)).append("\n");
         sb.append("    channels: ").append(toIndentedString(this.channels)).append("\n");

@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import com.arkea.asyncapi.v3.models.AsyncAPI;
 import com.arkea.asyncapi.v3.models.Components;
-import com.arkea.asyncapi.v3.models.ExternalDocumentation;
+import com.arkea.asyncapi.v3.models.info.ExternalDocumentation;
 import com.arkea.asyncapi.v3.models.channels.Channel;
 import com.arkea.asyncapi.v3.models.channels.ChannelBindings;
 import com.arkea.asyncapi.v3.models.info.Contact;
@@ -61,9 +61,9 @@ public class AsyncAPIDeserializer {
 
     final static Logger logger = LoggerFactory.getLogger(AsyncAPIDeserializer.class);
 
-    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels", "components", "tags", "externalDocs", "extensions"));
+    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels", "components", "tags", "extensions"));
 
-    protected static Set<String> INFO_KEYS = new LinkedHashSet<>(Arrays.asList("title", "version", "description", "termsOfService", "contact", "license", "extensions"));
+    protected static Set<String> INFO_KEYS = new LinkedHashSet<>(Arrays.asList("title", "version", "description", "termsOfService", "contact", "license", "extensions", "externalDocs"));
 
     protected static Set<String> CONTACT_KEYS = new LinkedHashSet<>(Arrays.asList("name", "url", "email", "extensions"));
 
@@ -222,12 +222,6 @@ public class AsyncAPIDeserializer {
             final ArrayNode array = getArray("tags", rootNode, false, location, result);
             if (array != null && array.size() > 0) {
                 asyncAPI.setTags(getTagList(array, "tags", result));
-            }
-
-            obj = getObject("externalDocs", rootNode, false, location, result);
-            if (obj != null) {
-                final ExternalDocumentation externalDocs = getExternalDocs(obj, "externalDocs", result);
-                asyncAPI.setExternalDocs(externalDocs);
             }
 
             final Map<String, Object> extensions = getExtensions(rootNode);
@@ -921,6 +915,12 @@ public class AsyncAPIDeserializer {
         final Map<String, Object> extensions = getExtensions(node);
         if (extensions != null && extensions.size() > 0) {
             info.setExtensions(extensions);
+        }
+
+        obj = getObject("externalDocs", node, false, location, result);
+        if (obj != null) {
+            final ExternalDocumentation externalDocs = getExternalDocs(obj, "externalDocs", result);
+            info.setExternalDocs(externalDocs);
         }
 
         final Set<String> keys = getKeys(node);

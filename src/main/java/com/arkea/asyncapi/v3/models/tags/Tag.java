@@ -1,6 +1,6 @@
 package com.arkea.asyncapi.v3.models.tags;
 
-import com.arkea.asyncapi.v3.models.ExternalDocumentation;
+import com.arkea.asyncapi.v3.models.info.ExternalDocumentation;
 
 import java.util.LinkedList;
 import java.util.Objects;
