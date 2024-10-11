@@ -13,7 +13,8 @@ servers:
     protocol: amqp
 
 channels:
-  '{queue}':
+  queueChannel:
+    address: '{queue}'
     parameters:
       queue:
         schema:

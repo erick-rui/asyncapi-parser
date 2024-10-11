@@ -14,7 +14,8 @@ servers:
       - httpBearerToken: []
 
 channels:
-  /rooms/{roomId}/{resource}:
+  gitterRoomChannel:
+    address: /rooms/{roomId}/{resource}
     parameters:
       roomId:
         description: Id of the Gitter room.

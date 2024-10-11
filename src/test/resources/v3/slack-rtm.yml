@@ -14,7 +14,8 @@ servers:
       - token: []
 
 channels:
-  /:
+  generalChannel:
+    address: /
     publish:
       message:
         $ref: '#/components/messages/outgoingMessage'

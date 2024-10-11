@@ -71,7 +71,7 @@ public class AsyncApiV3ParserTest {
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
-		assertTrue(asyncAPI.getChannels().get("smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured").getExtensions().size() > 0);
+		assertTrue(asyncAPI.getChannels().get("lightingMeasuredChannel").getExtensions().size() > 0);
 	}
 
 	@Test
@@ -126,8 +126,8 @@ public class AsyncApiV3ParserTest {
 		AsyncAPI asyncAPI = parseResult.getAsyncAPI();
 		assertNotNull(asyncAPI);
 		assertTrue(parseResult.getMessages().size() == 0);
-		assertTrue(asyncAPI.getChannels().get("user/signedup").getExtensions().size() > 0);
-		assertTrue(asyncAPI.getChannels().get("user/signedup").getExtensions().get("x-arkea") != null);
+		assertTrue(asyncAPI.getChannels().get("userSignupChannel").getExtensions().size() > 0);
+		assertTrue(asyncAPI.getChannels().get("userSignupChannel").getExtensions().get("x-arkea") != null);
 
 	}
 	@Test

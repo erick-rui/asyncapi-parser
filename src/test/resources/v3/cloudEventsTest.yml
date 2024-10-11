@@ -5,7 +5,8 @@ info:
   title: User service
   version: 1.6.3
 channels:
-  user/signedup:
+  userSignupChannel:
+    address: user/signedup
     x-arkea: testarkea
     publish:
       message:

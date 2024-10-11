@@ -23,7 +23,8 @@ servers:
 defaultContentType: application/json
 
 channels:
-  smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured:
+  lightingMeasuredChannel:
+    address: smartylighting/streetlights/1/0/event/{streetlightId}/lighting/measured
     x-internal-id: test
     parameters:
       streetlightId:

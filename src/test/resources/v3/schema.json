@@ -493,6 +493,10 @@
             "$ref": "#/definitions/parameter"
           }
         },
+        "address": {
+          "type": "string",
+          "description": "The address of the channel."
+        },
         "description": {
           "type": "string",
           "description": "A description of the channel."

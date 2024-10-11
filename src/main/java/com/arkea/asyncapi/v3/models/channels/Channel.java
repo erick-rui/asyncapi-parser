@@ -14,6 +14,15 @@ import com.arkea.asyncapi.v3.models.parameters.Parameter;
 public class Channel {
 
     /**
+     * An optional string representation of this channel's address.
+     * The address is typically the "topic name", "routing key", "event type", or "path".
+     * When null or absent, it MUST be interpreted as unknown.
+     * This is useful when the address is generated dynamically at runtime or can't be known upfront.
+     * It MAY contain Channel Address Expressions. Query parameters and fragments SHALL NOT be used, instead use bindings to define them.
+     */
+    private String address = null;
+
+    /**
      * An optional description of this channel item. CommonMark syntax can be used
      * for rich text representation.
      */
@@ -54,6 +63,24 @@ public class Channel {
     private Map<String, Object> extensions = null;
 
     /**
+     * Return the address of this channel
+     *
+     * @return String address
+     */
+    public String getAddress() {
+        return this.description;
+    }
+
+    /**
+     * Set the description property of this channel instance.
+     *
+     * @param address Channel Address
+     */
+    public void setAddress(final String address) {
+        this.address = address;
+    }
+
+    /**
      * Return the description of this channel
      *
      * @return String description
@@ -65,7 +92,7 @@ public class Channel {
     /**
      * Set the description property of this channel instance.
      *
-     * @param String description
+     * @param description channel description
      */
     public void setDescription(final String description) {
         this.description = description;
@@ -83,7 +110,7 @@ public class Channel {
     /**
      * Set the subscribe property of this channel instance.
      *
-     * @param Operation subscribe
+     * @param subscribe Subscribe Operation
      */
     public void setSubscribe(final Operation subscribe) {
         this.subscribe = subscribe;
@@ -110,7 +137,7 @@ public class Channel {
     /**
      * Set parameters of this channel instance.
      *
-     * @param Map<String, Parameter> parameters
+     * @param parameters Map of channel parameters
      */
     public void setParameters(final Map<String, Parameter> parameters) {
         this.parameters = parameters;
@@ -119,7 +146,7 @@ public class Channel {
     /**
      * Set the publish property of this channel instance.
      *
-     * @param Operation publish
+     * @param publish Publish Operation
      */
     public void setPublish(final Operation publish) {
         this.publish = publish;
@@ -137,7 +164,7 @@ public class Channel {
     /**
      * Set the bindings property of this channel instance.
      *
-     * @param Map<String, ChannelBindings> bindings
+     * @param bindings Map of channel bindings
      */
     public void setBindings(final Map<String, ChannelBindings> bindings) {
         this.bindings = bindings;
@@ -146,8 +173,8 @@ public class Channel {
     /**
      * Return the channel instance by ref
      *
-     * @param $ref
-     * @return
+     * @param $ref reference
+     * @return channel
      */
     public Channel $ref(final String $ref) {
 
@@ -174,8 +201,7 @@ public class Channel {
     /**
      * Set the extensions property of this channel instance.
      *
-     * @param extensions
-     * @return ExternalDocumentation this
+     * @param extensions extensions
      */
     public void setExtensions(final Map<String, Object> extensions) {
         this.extensions = extensions;
@@ -187,6 +213,7 @@ public class Channel {
         int result = 1;
         result = prime * result + (this.$ref == null ? 0 : this.$ref.hashCode());
         result = prime * result + (this.bindings == null ? 0 : this.bindings.hashCode());
+        result = prime * result + (this.address == null ? 0 : this.address.hashCode());
         result = prime * result + (this.description == null ? 0 : this.description.hashCode());
         result = prime * result + (this.extensions == null ? 0 : this.extensions.hashCode());
         result = prime * result + (this.publish == null ? 0 : this.publish.hashCode());
@@ -219,6 +246,13 @@ public class Channel {
                 return false;
             }
         } else if (!this.bindings.equals(other.bindings)) {
+            return false;
+        }
+        if (this.address == null) {
+            if (other.address != null) {
+                return false;
+            }
+        } else if (!this.address.equals(other.address)) {
             return false;
         }
         if (this.description == null) {
@@ -261,7 +295,14 @@ public class Channel {
 
     @Override
     public String toString() {
-        return "Channel [description=" + this.description + ", subscribe=" + this.subscribe + ", publish=" + this.publish + ", parameters=" + this.parameters + ", bindings=" + this.bindings + ", $ref=" + this.$ref + ", extensions=" + this.extensions + "]";
+        return "Channel [address=" + this.address +
+                ", description=" + this.description +
+                ", subscribe=" + this.subscribe +
+                ", publish=" + this.publish +
+                ", parameters=" + this.parameters +
+                ", bindings=" + this.bindings +
+                ", $ref=" + this.$ref +
+                ", extensions=" + this.extensions + "]";
     }
 
 }

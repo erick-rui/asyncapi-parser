@@ -71,7 +71,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> TAG_KEYS = new LinkedHashSet<>(Arrays.asList("name", "description", "externalDocs", "extensions"));
 
-    protected static Set<String> CHANNEL_KEYS = new LinkedHashSet<>(Arrays.asList("description", "subscribe", "publish", "parameters", "bindings", "extensions"));
+    protected static Set<String> CHANNEL_KEYS = new LinkedHashSet<>(Arrays.asList("address", "description", "subscribe", "publish", "parameters", "bindings", "extensions"));
 
     protected static Set<String> SERVER_KEYS = new LinkedHashSet<>(Arrays.asList("host","pathname", "protocol", "protocolVersion", "description", "variables", "security"));
 
@@ -687,7 +687,12 @@ public class AsyncAPIDeserializer {
 
         final Channel channel = new Channel();
 
-        final String value = getString("description", node, false, String.format("%s.%s", location, "description"), result);
+        String value = getString("address", node, false, String.format("%s.%s", location, "address"), result);
+        if (StringUtils.isNotBlank(value)) {
+            channel.setAddress(value);
+        }
+
+        value = getString("description", node, false, String.format("%s.%s", location, "description"), result);
         if (StringUtils.isNotBlank(value)) {
             channel.setDescription(value);
         }
@@ -704,19 +709,19 @@ public class AsyncAPIDeserializer {
 
         objectNode = getObject("bindings", node, false, String.format("%s.%s", location, "bindings"), result);
         final Map<String, ChannelBindings> bindings = getChannelBindings(objectNode, String.format("%s.%s", location, "bindings"), result, false);
-        if (bindings != null && bindings.size() > 0) {
+        if (bindings != null && !bindings.isEmpty()) {
             channel.setBindings(bindings);
         }
 
         // private Map<String,Parameter> parameters = null;
         objectNode = getObject("parameters", node, false, String.format("%s.%s", location, "parameters"), result);
         final Map<String, Parameter> parameters = getParameters(objectNode, String.format("%s.%s", location, "parameters"), result, false);
-        if (parameters != null && parameters.size() > 0) {
+        if (parameters != null && !parameters.isEmpty()) {
             channel.setParameters(parameters);
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             channel.setExtensions(extensions);
         }
 

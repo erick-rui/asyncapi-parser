@@ -14,7 +14,8 @@ servers:
     protocol: mercure
 
 channels:
-  'https://example.com/books/{id}':
+  bookChannel:
+    address: 'https://example.com/books/{id}'
     description: Every time a resource of type `http://schema.org/Book` is created or modified, a JSON-LD representation of the new version of this resource must be pushed in this Mercure topic.
     parameters:
       id:
