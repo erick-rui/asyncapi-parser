@@ -13,7 +13,6 @@ import com.arkea.asyncapi.v3.models.info.Info;
 import com.arkea.asyncapi.v3.models.media.Schema;
 import com.arkea.asyncapi.v3.models.security.SecurityScheme;
 import com.arkea.asyncapi.v3.models.servers.Server;
-import com.arkea.asyncapi.v3.models.tags.Tag;
 
 /**
  * AsyncAPI
@@ -48,9 +47,6 @@ public class AsyncAPI {
 
     /** An element to hold various schemas for the specification. */
     private Components components = null;
-
-    /** A list of tags used by the specification with additional metadata. Each tag name in the list MUST be unique. */
-    private List<Tag> tags = null;
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
@@ -148,33 +144,6 @@ public class AsyncAPI {
     }
 
     /**
-     * returns the tags property from a AsyncAPI instance.
-     *
-     * @return List&lt;Tag&gt; tags
-     **/
-
-    public List<Tag> getTags() {
-        return this.tags;
-    }
-
-    public void setTags(final List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public AsyncAPI tags(final List<Tag> tags) {
-        this.tags = tags;
-        return this;
-    }
-
-    public AsyncAPI addTagsItem(final Tag tagsItem) {
-        if (this.tags == null) {
-            this.tags = new ArrayList<>();
-        }
-        this.tags.add(tagsItem);
-        return this;
-    }
-
-    /**
      * returns the components property from a AsyncAPI instance.
      *
      * @return Components components
@@ -251,19 +220,22 @@ public class AsyncAPI {
                         Objects.equals(this.servers, asyncAPI.servers) &&
                         Objects.equals(this.defaultContentType, asyncAPI.defaultContentType) &&
                         Objects.equals(this.channels, asyncAPI.channels) &&
-                        Objects.equals(this.tags, asyncAPI.tags) &&
                         Objects.equals(this.components, asyncAPI.components) &&
                         Objects.equals(this.extensions, asyncAPI.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.asyncapi, this.id, this.info, this.servers, this.defaultContentType, this.channels,
-                        this.// security,
-                                        tags,
-                        this.// paths,
-                                        components,
-                        this.extensions);
+        return Objects.hash(this.asyncapi,
+                this.id,
+                this.info,
+                this.servers,
+                this.defaultContentType,
+                this.channels,
+                this.// security,
+                        components,
+                this.// paths,
+                        extensions);
     }
 
     @Override
@@ -277,7 +249,6 @@ public class AsyncAPI {
         sb.append("    servers: ").append(toIndentedString(this.servers)).append("\n");
         sb.append("    defaultContentType: ").append(toIndentedString(this.defaultContentType)).append("\n");
         sb.append("    channels: ").append(toIndentedString(this.channels)).append("\n");
-        sb.append("    tags: ").append(toIndentedString(this.tags)).append("\n");
         sb.append("    components: ").append(toIndentedString(this.components)).append("\n");
         sb.append("}");
         return sb.toString();

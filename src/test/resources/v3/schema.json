@@ -43,13 +43,6 @@
     },
     "components": {
       "$ref": "#/definitions/components"
-    },
-    "tags": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/tag"
-      },
-      "uniqueItems": true
     }
   },
   "definitions": {
@@ -107,6 +100,13 @@
         },
         "externalDocs": {
           "$ref": "#/definitions/externalDocs"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tag"
+          },
+          "uniqueItems": true
         }
       }
     },

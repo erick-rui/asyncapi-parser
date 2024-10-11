@@ -61,9 +61,9 @@ public class AsyncAPIDeserializer {
 
     final static Logger logger = LoggerFactory.getLogger(AsyncAPIDeserializer.class);
 
-    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels", "components", "tags", "extensions"));
+    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels", "components", "extensions"));
 
-    protected static Set<String> INFO_KEYS = new LinkedHashSet<>(Arrays.asList("title", "version", "description", "termsOfService", "contact", "license", "extensions", "externalDocs"));
+    protected static Set<String> INFO_KEYS = new LinkedHashSet<>(Arrays.asList("title", "version", "description", "termsOfService", "contact", "license", "extensions", "externalDocs", "tags"));
 
     protected static Set<String> CONTACT_KEYS = new LinkedHashSet<>(Arrays.asList("name", "url", "email", "extensions"));
 
@@ -217,11 +217,6 @@ public class AsyncAPIDeserializer {
                 final Components components = getComponents(obj, "components", result);
                 asyncAPI.setComponents(components);
                 this.components = components;
-            }
-
-            final ArrayNode array = getArray("tags", rootNode, false, location, result);
-            if (array != null && array.size() > 0) {
-                asyncAPI.setTags(getTagList(array, "tags", result));
             }
 
             final Map<String, Object> extensions = getExtensions(rootNode);
@@ -921,6 +916,11 @@ public class AsyncAPIDeserializer {
         if (obj != null) {
             final ExternalDocumentation externalDocs = getExternalDocs(obj, "externalDocs", result);
             info.setExternalDocs(externalDocs);
+        }
+
+        final ArrayNode array = getArray("tags", node, false, location, result);
+        if (array != null && array.size() > 0) {
+            info.setTags(getTagList(array, "tags", result));
         }
 
         final Set<String> keys = getKeys(node);

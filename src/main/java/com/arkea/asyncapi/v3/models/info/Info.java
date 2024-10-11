@@ -1,7 +1,11 @@
 package com.arkea.asyncapi.v3.models.info;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import com.arkea.asyncapi.v3.models.AsyncAPI;
+import com.arkea.asyncapi.v3.models.tags.Tag;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -34,6 +38,9 @@ public class Info {
 
     /** Additional external documentation. */
     private ExternalDocumentation externalDocs = null;
+
+    /** A list of tags used by the specification with additional metadata. Each tag name in the list MUST be unique. */
+    private List<Tag> tags = null;
 
 
     /** The common x-view extension required by asyncapi-generator**/     
@@ -264,7 +271,7 @@ public class Info {
     }
 
     /**
-     * returns the externalDocs property from a AsyncAPI instance.
+     * returns the externalDocs property from an Info instance.
      *
      * @return ExternalDocumentation externalDocs
      **/
@@ -279,6 +286,33 @@ public class Info {
 
     public Info externalDocs(final ExternalDocumentation externalDocs) {
         this.externalDocs = externalDocs;
+        return this;
+    }
+
+    /**
+     * returns the tags property from an Info instance.
+     *
+     * @return List&lt;Tag&gt; tags
+     **/
+
+    public List<Tag> getTags() {
+        return this.tags;
+    }
+
+    public void setTags(final List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public Info tags(final List<Tag> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    public Info addTagsItem(final Tag tagsItem) {
+        if (this.tags == null) {
+            this.tags = new ArrayList<>();
+        }
+        this.tags.add(tagsItem);
         return this;
     }
 
@@ -298,12 +332,21 @@ public class Info {
                         Objects.equals(this.license, info.license) &&
                         Objects.equals(this.version, info.version) &&
                         Objects.equals(this.extensions, info.extensions) &&
-                        Objects.equals(this.externalDocs, info.externalDocs);
+                        Objects.equals(this.externalDocs, info.externalDocs) &&
+                        Objects.equals(this.tags, info.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.title, this.description, this.termsOfService, this.contact, this.license, this.version, this.extensions, this.externalDocs);
+        return Objects.hash(this.title,
+                this.description,
+                this.termsOfService,
+                this.contact,
+                this.license,
+                this.version,
+                this.extensions,
+                this.externalDocs,
+                this.tags);
     }
 
     @Override
@@ -318,6 +361,7 @@ public class Info {
         sb.append("    license: ").append(toIndentedString(this.license)).append("\n");
         sb.append("    version: ").append(toIndentedString(this.version)).append("\n");
         sb.append("    externalDocs: ").append(toIndentedString(this.externalDocs)).append("\n");
+        sb.append("    tags: ").append(toIndentedString(this.tags)).append("\n");
         sb.append("}");
         return sb.toString();
     }
