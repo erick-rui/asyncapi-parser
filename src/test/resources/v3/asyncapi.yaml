@@ -22,7 +22,7 @@ info:
 
 servers:
   production:
-    host: api.streetlights.smartylighting.com:{port}
+    host: 'api.streetlights.smartylighting.com:{port}'
     protocol: mqtt
     description: Test broker
     variables:
@@ -49,49 +49,67 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    subscribe:
-      summary: Receive information about environmental lighting conditions of a particular streetlight.
-      operationId: receiveLightMeasurement
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
+    messages:
+      lightMeasured:
         $ref: '#/components/messages/lightMeasured'
+#    subscribe:
+#      summary: Receive information about environmental lighting conditions of a particular streetlight.
+#      operationId: receiveLightMeasurement
+#      traits:
+#        - $ref: '#/components/operationTraits/kafka'
+#      message:
+#        $ref: '#/components/messages/lightMeasured'
 
   turnOnChannel:
     address: smartylighting/streetlights/1/0/action/{streetlightId}/turn/on
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: turnOn
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
+    messages:
+      turnOnOff:
         $ref: '#/components/messages/turnOnOff'
+#    publish:
+#      operationId: turnOn
+#      traits:
+#        - $ref: '#/components/operationTraits/kafka'
+#      message:
+#        $ref: '#/components/messages/turnOnOff'
 
   turnOffChannel:
     address: smartylighting/streetlights/1/0/action/{streetlightId}/turn/off
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: turnOff
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
+    messages:
+      turnOnOff:
         $ref: '#/components/messages/turnOnOff'
+#    publish:
+#      operationId: turnOff
+#      traits:
+#        - $ref: '#/components/operationTraits/kafka'
+#      message:
+#        $ref: '#/components/messages/turnOnOff'
 
   dimChannel:
     address: smartylighting/streetlights/1/0/action/{streetlightId}/dim
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    publish:
-      operationId: dimLight
-      traits:
-        - $ref: '#/components/operationTraits/kafka'
-      message:
+    messages:
+      dimLight:
         $ref: '#/components/messages/dimLight'
+#    publish:
+#      operationId: dimLight
+#      traits:
+#        - $ref: '#/components/operationTraits/kafka'
+#      message:
+#        $ref: '#/components/messages/dimLight'
+
+operations:
+  measureLight:
+    action: receive
+    channel:
+      $ref: '#/channels/lightingMeasuredChannel'
 
 components:
   messages:

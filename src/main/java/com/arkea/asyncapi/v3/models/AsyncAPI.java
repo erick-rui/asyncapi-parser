@@ -11,6 +11,7 @@ import com.arkea.asyncapi.v3.models.channels.Channel;
 import com.arkea.asyncapi.v3.models.info.Identifier;
 import com.arkea.asyncapi.v3.models.info.Info;
 import com.arkea.asyncapi.v3.models.media.Schema;
+import com.arkea.asyncapi.v3.models.operations.Operation;
 import com.arkea.asyncapi.v3.models.security.SecurityScheme;
 import com.arkea.asyncapi.v3.models.servers.Server;
 
@@ -42,8 +43,11 @@ public class AsyncAPI {
     /** Default content type to use when encoding/decoding a message's payload. */
     private String defaultContentType = null;
 
-    /** Channels Object	Required The available channels and messages for the API. */
+    /** Channels Object	 The available channels and messages for the API. */
     private Map<String, Channel> channels = new HashMap<String, Channel>();
+
+    /** Operations  Object The available operations for the API. */
+    private Map<String, Operation> operations = new HashMap<String, Operation>();
 
     /** An element to hold various schemas for the specification. */
     private Components components = null;
@@ -143,6 +147,14 @@ public class AsyncAPI {
         this.channels = channels;
     }
 
+    public Map<String, Operation> getOperations() {
+        return this.operations;
+    }
+
+    public void setOperations(final Map<String, Operation> operations) {
+        this.operations = operations;
+    }
+
     /**
      * returns the components property from a AsyncAPI instance.
      *
@@ -220,6 +232,7 @@ public class AsyncAPI {
                         Objects.equals(this.servers, asyncAPI.servers) &&
                         Objects.equals(this.defaultContentType, asyncAPI.defaultContentType) &&
                         Objects.equals(this.channels, asyncAPI.channels) &&
+                        Objects.equals(this.operations, asyncAPI.operations) &&
                         Objects.equals(this.components, asyncAPI.components) &&
                         Objects.equals(this.extensions, asyncAPI.extensions);
     }
@@ -232,6 +245,7 @@ public class AsyncAPI {
                 this.servers,
                 this.defaultContentType,
                 this.channels,
+                this.operations,
                 this.// security,
                         components,
                 this.// paths,
@@ -249,6 +263,7 @@ public class AsyncAPI {
         sb.append("    servers: ").append(toIndentedString(this.servers)).append("\n");
         sb.append("    defaultContentType: ").append(toIndentedString(this.defaultContentType)).append("\n");
         sb.append("    channels: ").append(toIndentedString(this.channels)).append("\n");
+        sb.append("    operations: ").append(toIndentedString(this.operations)).append("\n");
         sb.append("    components: ").append(toIndentedString(this.components)).append("\n");
         sb.append("}");
         return sb.toString();

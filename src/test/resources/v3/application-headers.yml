@@ -29,11 +29,17 @@ channels:
     parameters:
       streetlightId:
         $ref: '#/components/parameters/streetlightId'
-    publish:
-      summary: Inform about environmental lighting conditions of a particular streetlight.
-      operationId: receiveLightMeasurement
-      message:
+    messages:
+      lightMeasured:
         $ref: '#/components/messages/lightMeasured'
+
+operations:
+  receiveLightMeasurement:
+    summary: Inform about environmental lighting conditions of a particular streetlight.
+    action: receive
+    channel:
+      $ref: '#/channels/lightingMeasuredChannel'
+
 
 components:
   messages:

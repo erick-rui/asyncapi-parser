@@ -8,8 +8,8 @@ channels:
   userSignupChannel:
     address: user/signedup
     x-arkea: testarkea
-    publish:
-      message:
+    messages:
+      createUserMessage:
         payload:
           type: object
           properties:
@@ -41,3 +41,9 @@ channels:
                 email:
                   type: string
                   format: email
+
+operations:
+  createUser:
+    action: send
+    channel:
+      $ref: '#/channels/userSignupChannel'

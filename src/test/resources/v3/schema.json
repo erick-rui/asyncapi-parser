@@ -501,11 +501,8 @@
           "type": "string",
           "description": "A description of the channel."
         },
-        "publish": {
-          "$ref": "#/definitions/operation"
-        },
-        "subscribe": {
-          "$ref": "#/definitions/operation"
+        "messages": {
+          "$ref": "#/definitions/messages"
         },
         "deprecated": {
           "type": "boolean",
@@ -550,6 +547,9 @@
         }
       },
       "properties": {
+        "action": {
+          "type": "string"
+        },
         "traits": {
           "type": "array",
           "items": {

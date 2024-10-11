@@ -2,6 +2,7 @@ package com.arkea.asyncapi.v3.models.channels;
 
 import java.util.Map;
 
+import com.arkea.asyncapi.v3.models.messages.Message;
 import com.arkea.asyncapi.v3.models.operations.Operation;
 import com.arkea.asyncapi.v3.models.parameters.Parameter;
 
@@ -28,11 +29,12 @@ public class Channel {
      */
     private String description = null;
 
-    /** A definition of the SUBSCRIBE operation. */
-    private Operation subscribe = null;
-
-    /** A definition of the PUBLISH operation. */
-    private Operation publish = null;
+    /**
+     * A map of the messages that will be sent to this channel by any application at any time.
+     * Every message sent to this channel MUST be valid against one,
+     * and only one, of the message objects defined in this map.
+     */
+    private Map<String, Message> messages = null;
 
     /**
      * A map of the parameters included in the channel name. It SHOULD be present
@@ -99,30 +101,21 @@ public class Channel {
     }
 
     /**
-     * Return the subscribe parameter of this channel
+     * Return messages from this channel
      *
-     * @return Operation subscribe
+     * @return Map<String, Message> messages
      */
-    public Operation getSubscribe() {
-        return this.subscribe;
+    public Map<String, Message> getMessages() {
+        return this.messages;
     }
 
     /**
-     * Set the subscribe property of this channel instance.
+     * Set parameters of this channel instance.
      *
-     * @param subscribe Subscribe Operation
+     * @param parameters Map of channel parameters
      */
-    public void setSubscribe(final Operation subscribe) {
-        this.subscribe = subscribe;
-    }
-
-    /**
-     * Return the publish parameter from this channel
-     *
-     * @return Operation publish
-     */
-    public Operation getPublish() {
-        return this.publish;
+    public void setMessages(final Map<String, Message> messages) {
+        this.messages = messages;
     }
 
     /**
@@ -143,14 +136,6 @@ public class Channel {
         this.parameters = parameters;
     }
 
-    /**
-     * Set the publish property of this channel instance.
-     *
-     * @param publish Publish Operation
-     */
-    public void setPublish(final Operation publish) {
-        this.publish = publish;
-    }
 
     /**
      * Return the bindings parameter from this channel
@@ -216,9 +201,8 @@ public class Channel {
         result = prime * result + (this.address == null ? 0 : this.address.hashCode());
         result = prime * result + (this.description == null ? 0 : this.description.hashCode());
         result = prime * result + (this.extensions == null ? 0 : this.extensions.hashCode());
-        result = prime * result + (this.publish == null ? 0 : this.publish.hashCode());
+        result = prime * result + (this.messages == null ? 0 : this.messages.hashCode());
         result = prime * result + (this.parameters == null ? 0 : this.parameters.hashCode());
-        result = prime * result + (this.subscribe == null ? 0 : this.subscribe.hashCode());
         return result;
     }
 
@@ -269,11 +253,11 @@ public class Channel {
         } else if (!this.extensions.equals(other.extensions)) {
             return false;
         }
-        if (this.publish == null) {
-            if (other.publish != null) {
+        if (this.messages == null) {
+            if (other.messages != null) {
                 return false;
             }
-        } else if (!this.publish.equals(other.publish)) {
+        } else if (!this.messages.equals(other.messages)) {
             return false;
         }
         if (this.parameters == null) {
@@ -283,13 +267,6 @@ public class Channel {
         } else if (!this.parameters.equals(other.parameters)) {
             return false;
         }
-        if (this.subscribe == null) {
-            if (other.subscribe != null) {
-                return false;
-            }
-        } else if (!this.subscribe.equals(other.subscribe)) {
-            return false;
-        }
         return true;
     }
 
@@ -297,8 +274,7 @@ public class Channel {
     public String toString() {
         return "Channel [address=" + this.address +
                 ", description=" + this.description +
-                ", subscribe=" + this.subscribe +
-                ", publish=" + this.publish +
+                ", messages=" + this.messages +
                 ", parameters=" + this.parameters +
                 ", bindings=" + this.bindings +
                 ", $ref=" + this.$ref +

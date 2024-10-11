@@ -61,7 +61,7 @@ public class AsyncAPIDeserializer {
 
     final static Logger logger = LoggerFactory.getLogger(AsyncAPIDeserializer.class);
 
-    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels", "components", "extensions"));
+    protected static Set<String> ROOT_KEYS = new LinkedHashSet<>(Arrays.asList("asyncapi", "id", "info", "servers", "defaultContentType", "channels","operations", "components", "extensions"));
 
     protected static Set<String> INFO_KEYS = new LinkedHashSet<>(Arrays.asList("title", "version", "description", "termsOfService", "contact", "license", "extensions", "externalDocs", "tags"));
 
@@ -71,7 +71,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> TAG_KEYS = new LinkedHashSet<>(Arrays.asList("name", "description", "externalDocs", "extensions"));
 
-    protected static Set<String> CHANNEL_KEYS = new LinkedHashSet<>(Arrays.asList("address", "description", "subscribe", "publish", "parameters", "bindings", "extensions"));
+    protected static Set<String> CHANNEL_KEYS = new LinkedHashSet<>(Arrays.asList("address", "description", "messages", "parameters", "bindings", "extensions"));
 
     protected static Set<String> SERVER_KEYS = new LinkedHashSet<>(Arrays.asList("host","pathname", "protocol", "protocolVersion", "description", "variables", "security"));
 
@@ -88,7 +88,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> MESSAGE_BINDING_KEYS = new LinkedHashSet<>(Arrays.asList("http", "ws", "kafka", "amqp", "amqp1", "mqtt", "mqtt5", "nats", "jms", "sns", "sqs", "stomp", "redis", "mercure", "extensions"));
 
-    protected static Set<String> OPERATION_KEYS = new LinkedHashSet<>(Arrays.asList("operationId", "summary", "description", "tags", "externalDocs", "bindings", "traits", "message", "extensions"));
+    protected static Set<String> OPERATION_KEYS = new LinkedHashSet<>(Arrays.asList("operationId", "action", "channel", "summary", "description", "tags", "externalDocs", "bindings", "traits", "messages", "extensions"));
 
     protected static Set<String> OPERATION_TRAIT_KEYS = new LinkedHashSet<>(Arrays.asList("$ref", "operationId", "summary", "description", "tags", "externalDocs", "bindings", "extensions"));
 
@@ -205,11 +205,16 @@ public class AsyncAPIDeserializer {
                 asyncAPI.setServers(getServersMap(obj, "servers", result));
             }
 
-            // required
-            obj = getObject("channels", rootNode, true, location, result);
+            obj = getObject("channels", rootNode, false, location, result);
             if (obj != null) {
                 final Map<String, Channel> channels = getChannels(obj, "channels", result, false);
                 asyncAPI.setChannels(channels);
+            }
+
+            obj = getObject("operations", rootNode, false, location, result);
+            if (obj != null) {
+                final Map<String, Operation> operations = getOperations(obj, "operations", result, false);
+                asyncAPI.setOperations(operations);
             }
 
             obj = getObject("components", rootNode, false, location, result);
@@ -686,6 +691,21 @@ public class AsyncAPIDeserializer {
         }
 
         final Channel channel = new Channel();
+        final JsonNode ref = node.get("$ref");
+        if (ref != null) {
+            if (ref.getNodeType().equals(JsonNodeType.STRING)) {
+                final String mungedRef = mungedRef(ref.textValue());
+                if (mungedRef != null) {
+                    channel.set$ref(mungedRef);
+                } else {
+                    channel.set$ref(ref.textValue());
+                }
+                return channel;
+            } else {
+                result.invalidType(location, "$ref", "string", node);
+                return null;
+            }
+        }
 
         String value = getString("address", node, false, String.format("%s.%s", location, "address"), result);
         if (StringUtils.isNotBlank(value)) {
@@ -697,14 +717,10 @@ public class AsyncAPIDeserializer {
             channel.setDescription(value);
         }
 
-        final ObjectNode subscribeNode = getObject("subscribe", node, false, String.format("%s.%s", location, "subscribe"), result);
-        if (subscribeNode != null) {
-            channel.setSubscribe(getOperation(subscribeNode, String.format("%s.%s", location, "subscribe"), result));
-        }
-
-        ObjectNode objectNode = getObject("publish", node, false, String.format("%s.%s", location, "publish"), result);
-        if (objectNode != null) {
-            channel.setPublish(getOperation(objectNode, String.format("%s.%s", location, "publish"), result));
+        ObjectNode objectNode = getObject("messages", node, false, String.format("%s.%s", location, "messages"), result);
+        final Map<String, Message> messages = getMessages(objectNode, String.format("%s.%s", location, "messages"), result, false);
+        if (messages != null && !messages.isEmpty()) {
+            channel.setMessages(messages);
         }
 
         objectNode = getObject("bindings", node, false, String.format("%s.%s", location, "bindings"), result);
@@ -2504,6 +2520,28 @@ public class AsyncAPIDeserializer {
     }
 
     // OK
+    public Map<String, Operation> getOperations(final ObjectNode obj, final String location, final ParseResult result, final boolean underComponents) {
+        if (obj == null) {
+            return null;
+        }
+        final Map<String, Operation> operations = new LinkedHashMap<>();
+
+        final Iterator<Map.Entry<String, JsonNode>> iter = obj.fields();
+        while (iter.hasNext()) {
+            final Map.Entry<String, JsonNode> entry = iter.next();
+
+            if (entry.getValue().getNodeType().equals(JsonNodeType.OBJECT)) {
+                final Operation operationObj = getOperation((ObjectNode) entry.getValue(), String.format("%s.%s", location, entry.getKey()), result);
+                if (operationObj != null) {
+                    operations.put(entry.getKey(), operationObj);
+                }
+            }
+        }
+        return operations;
+    }
+
+
+    // OK
     public Operation getOperation(final ObjectNode obj, final String location, final ParseResult result) {
         if (obj == null) {
             return null;
@@ -2514,6 +2552,17 @@ public class AsyncAPIDeserializer {
         String value = getString("operationId", obj, false, String.format("%s.%s", location, "operationId"), result, this.operationIDs);
         if (StringUtils.isNotBlank(value)) {
             operation.setOperationId(value);
+        }
+
+        value = getString("action", obj, true, String.format("%s.%s", location, "action"), result);
+        if (StringUtils.isNotBlank(value)) {
+            operation.setAction(Operation.ActionEnum.getAction(value));
+        }
+
+        ObjectNode nodeObj = getObject("channel", obj, true, location, result);
+        final Channel channel = getChannel(nodeObj, String.format("%s.%s", location, "channel"), result);
+        if (channel != null) {
+            operation.setChannel(channel);
         }
 
         value = getString("summary", obj, false, String.format("%s.%s", location, "summary"), result);
@@ -2532,7 +2581,7 @@ public class AsyncAPIDeserializer {
             operation.setTags(tags);
         }
 
-        ObjectNode nodeObj = getObject("externalDocs", obj, false, location, result);
+        nodeObj = getObject("externalDocs", obj, false, location, result);
         final ExternalDocumentation docs = getExternalDocs(nodeObj, String.format("%s.%s", location, "externalDocs"), result);
         if (docs != null) {
             operation.setExternalDocs(docs);
@@ -2550,26 +2599,10 @@ public class AsyncAPIDeserializer {
             operation.setTraits(getOperationTraitsList(array, "tags", result));
         }
 
-        final ObjectNode requestObjectNode = getObject("message", obj, false, location, result);
-        if (requestObjectNode != null) {
-            // If oneof
-
-            final ArrayNode oneOfArray = getArray("oneOf", requestObjectNode, false, location, result);
-            if (oneOfArray != null) {
-                // ObjectMapper mapper = new ObjectMapper();
-                ObjectNode itObj = null;
-                for (final JsonNode n : oneOfArray) {
-                    if (n.isObject()) {
-                        itObj = n.deepCopy();
-                        // itObj= (ObjectNode) mapper.readTree(n.asText());
-                        operation.setMessage(getMessage(itObj, String.format("%s.%s", location, "message"), result));
-                    }
-                }
-            }
-
-            else {
-                operation.setMessage(getMessage(requestObjectNode, String.format("%s.%s", location, "message"), result));
-            }
+        ObjectNode objectNode = getObject("messages", obj, false, String.format("%s.%s", location, "messages"), result);
+        final Map<String, Message> messages = getMessages(objectNode, String.format("%s.%s", location, "messages"), result, false);
+        if (messages != null && !messages.isEmpty()) {
+            operation.setMessages(messages);
         }
 
         final Map<String, Object> extensions = getExtensions(obj);

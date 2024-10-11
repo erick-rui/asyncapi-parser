@@ -3,6 +3,7 @@ package com.arkea.asyncapi.v3.models.operations;
 import java.util.List;
 import java.util.Map;
 
+import com.arkea.asyncapi.v3.models.channels.Channel;
 import com.arkea.asyncapi.v3.models.info.ExternalDocumentation;
 import com.arkea.asyncapi.v3.models.messages.Message;
 import com.arkea.asyncapi.v3.models.tags.Tag;
@@ -14,8 +15,40 @@ import com.arkea.asyncapi.v3.models.tags.Tag;
  */
 public class Operation {
 
+    /**
+     * Gets or Sets Action
+     */
+    public enum ActionEnum {
+
+        SEND("send"), RECEIVE("receive"), UNDEFINED("undefined");
+
+        private final String value;
+
+        ActionEnum(final String value) {
+            this.value = value;
+        }
+
+        public static ActionEnum getAction(final String value) {
+            try {
+                return ActionEnum.valueOf(value.toUpperCase());
+            } catch (final IllegalArgumentException e) {
+                return ActionEnum.UNDEFINED;
+            }
+
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.value);
+        }
+    }
+
+    private ActionEnum action = null;
+
     private String operationId = null; // string Unique string used to identify the operation. The id MUST be unique among all operations described in the API. The operationId value is case-sensitive. Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is
                                        // RECOMMENDED to follow common programming naming conventions.
+
+    private Channel channel = null; // [Channel Object | Reference Object] A definition of the channel in which this operation is performed.
 
     private String summary = null; // string A short summary of what the operation is about.
 
@@ -29,7 +62,8 @@ public class Operation {
 
     private List<OperationTrait> traits = null; // [Operation Trait Object | Reference Object ] A list of traits to apply to the operation object. Traits MUST be merged into the operation object using the JSON Merge Patch algorithm in the same order they are defined here.
 
-    private Message message = null; // [Message Object | Reference Object] A definition of the message that will be published or received on this channel. oneOf is allowed here to specify multiple messages, however, a message MUST be valid only against one of the referenced message objects.
+    private Map<String, Message> messages = null; // [Messages Object | Reference Object] A definition of the messages that can be processed by this operation.
+
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
@@ -41,6 +75,22 @@ public class Operation {
 
     public void setOperationId(final String operationId) {
         this.operationId = operationId;
+    }
+
+    public ActionEnum getAction() {
+        return action;
+    }
+
+    public void setAction(ActionEnum action) {
+        this.action = action;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
     }
 
     public String getSummary() {
@@ -91,13 +141,12 @@ public class Operation {
         this.traits = traits;
     }
 
-
-    public Message getMessage() {
-		return message;
+    public Map<String, Message> getMessages() {
+		return messages;
 	}
 
-	public void setMessage(Message message) {
-		this.message = message;
+	public void setMessages(Map<String, Message> messages) {
+		this.messages = messages;
 	}
 
 	public Map<String, Object> getExtensions() {
@@ -113,10 +162,11 @@ public class Operation {
         final int prime = 31;
         int result = 1;
         result = prime * result + (this.bindings == null ? 0 : this.bindings.hashCode());
+        result = prime * result + (this.channel == null ? 0 : this.channel.hashCode());
         result = prime * result + (this.description == null ? 0 : this.description.hashCode());
         result = prime * result + (this.extensions == null ? 0 : this.extensions.hashCode());
         result = prime * result + (this.externalDocs == null ? 0 : this.externalDocs.hashCode());
-        result = prime * result + (this.message == null ? 0 : this.message.hashCode());
+        result = prime * result + (this.messages == null ? 0 : this.messages.hashCode());
         result = prime * result + (this.operationId == null ? 0 : this.operationId.hashCode());
         result = prime * result + (this.summary == null ? 0 : this.summary.hashCode());
         result = prime * result + (this.tags == null ? 0 : this.tags.hashCode());
@@ -150,6 +200,13 @@ public class Operation {
         } else if (!this.description.equals(other.description)) {
             return false;
         }
+        if (this.channel == null) {
+            if (other.channel != null) {
+                return false;
+            }
+        } else if (!this.channel.equals(other.channel)) {
+            return false;
+        }
         if (this.extensions == null) {
             if (other.extensions != null) {
                 return false;
@@ -164,11 +221,11 @@ public class Operation {
         } else if (!this.externalDocs.equals(other.externalDocs)) {
             return false;
         }
-        if (this.message == null) {
-            if (other.message != null) {
+        if (this.messages == null) {
+            if (other.messages != null) {
                 return false;
             }
-        } else if (!this.message.equals(other.message)) {
+        } else if (!this.messages.equals(other.messages)) {
             return false;
         }
         if (this.operationId == null) {
@@ -204,8 +261,16 @@ public class Operation {
 
     @Override
     public String toString() {
-        return "Operation [operationId=" + this.operationId + ", summary=" + this.summary + ", description=" + this.description + ", tags=" + this.tags + ", externalDocs=" + this.externalDocs + ", bindings=" + this.bindings + ", traits=" + this.traits + ", message=" + this.message + ", extensions="
-                        + this.extensions + "]";
+        return "Operation [operationId=" + this.operationId +
+                ", channel=" + this.channel +
+                ", summary=" + this.summary +
+                ", description=" + this.description +
+                ", tags=" + this.tags +
+                ", externalDocs=" + this.externalDocs +
+                ", bindings=" + this.bindings +
+                ", traits=" + this.traits +
+                ", message=" + this.messages +
+                ", extensions=" + this.extensions + "]";
     }
 
 }
