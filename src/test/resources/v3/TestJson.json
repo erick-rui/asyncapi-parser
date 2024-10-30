@@ -117,7 +117,12 @@
 			],
 			"channel": {
 				"$ref": "#/channels/lightingMeasuredChannel"
-			}
+			},
+			"messages": [
+				{
+					"$ref": "#/components/messages/lightMeasured"
+				}
+			]
 		},
 		"turnOn": {
 			"action": "send",
@@ -128,7 +133,12 @@
 			],
 			"channel": {
 				"$ref": "#/channels/turnOnChannel"
-			}
+			},
+			"messages": [
+				{
+					"$ref": "#/components/messages/turnOnOff"
+				}
+			]
 		},
 		"turnOff": {
 			"action": "send",
@@ -139,7 +149,12 @@
 			],
 			"channel": {
 				"$ref": "#/channels/turnOffChannel"
-			}
+			},
+			"messages": [
+				{
+					"$ref": "#/components/messages/turnOnOff"
+				}
+			]
 		},
 		"dimLight": {
 			"action": "send",
@@ -150,7 +165,12 @@
 			],
 			"channel": {
 				"$ref": "#/channels/dimChannel"
-			}
+			},
+			"messages": [
+				{
+					"$ref": "#/components/messages/dimLight"
+				}
+			]
 		}
 	},
 	"components":{

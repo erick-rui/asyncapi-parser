@@ -39,6 +39,8 @@ operations:
     action: receive
     channel:
       $ref: '#/channels/lightingMeasuredChannel'
+    messages:
+      - $ref: '#/components/messages/lightMeasured'
 
 
 components:

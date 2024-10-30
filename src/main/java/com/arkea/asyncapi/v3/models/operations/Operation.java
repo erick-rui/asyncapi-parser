@@ -62,7 +62,7 @@ public class Operation {
 
     private List<OperationTrait> traits = null; // [Operation Trait Object | Reference Object ] A list of traits to apply to the operation object. Traits MUST be merged into the operation object using the JSON Merge Patch algorithm in the same order they are defined here.
 
-    private Map<String, Message> messages = null; // [Messages Object | Reference Object] A definition of the messages that can be processed by this operation.
+    private List<Message> messages = null; // [Messages Object | Reference Object] A list of $ref pointers pointing to the supported Message Objects that can be processed by this operation.
 
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
@@ -141,11 +141,11 @@ public class Operation {
         this.traits = traits;
     }
 
-    public Map<String, Message> getMessages() {
+    public List<Message> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(Map<String, Message> messages) {
+	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
 

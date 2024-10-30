@@ -25,10 +25,15 @@ operations:
     action: send
     channel:
       $ref: '#/channels/testChannel'
+    messages:
+      - $ref: '#/components/messages/testMessage1'
+      - $ref: '#/components/messages/testMessage2'
   receiveTest:
     action: receive
     channel:
       $ref: '#/channels/test2'
+    messages:
+      - $ref: '#/components/messages/testMessages'
 
 components:
   messages:

@@ -6,19 +6,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.ParseException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -153,7 +141,7 @@ public class AsyncAPIDeserializer {
             result.setMessages(rootParse.getParseMessages());
 
         } catch (final Exception e) {
-            result.setMessages(Arrays.asList(e.getMessage()));
+            result.setMessages(Collections.singletonList(e.getMessage()));
             logger.error(e.getMessage());
         }
         return result;
@@ -163,9 +151,8 @@ public class AsyncAPIDeserializer {
      * Return AsyncAPI formated model from the root node.
      *
      * @param node the root
-     * @param result
-     * @param path
-     * @return
+     * @param result ParseResult
+     * @return AsyncAPI
      *
      */
     public AsyncAPI parseRoot(final JsonNode node, final ParseResult result) {
@@ -225,7 +212,7 @@ public class AsyncAPIDeserializer {
             }
 
             final Map<String, Object> extensions = getExtensions(rootNode);
-            if (extensions != null && extensions.size() > 0) {
+            if (extensions != null && !extensions.isEmpty()) {
                 asyncAPI.setExtensions(extensions);
             }
 
@@ -347,7 +334,7 @@ public class AsyncAPIDeserializer {
         // private java.util.Map<String, Object> extensions = null;
         components.setExtensions(new LinkedHashMap<>());
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             components.setExtensions(extensions);
         }
 
@@ -409,7 +396,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             tag.setExtensions(extensions);
         }
 
@@ -489,7 +476,7 @@ public class AsyncAPIDeserializer {
         if (obj.get("variables") != null) {
             final ObjectNode variables = getObject("variables", obj, false, location, result);
             final Map<String, ServerVariable> serverVariables = getServerVariables(variables, String.format("%s.%s", location, "variables"), result);
-            if (serverVariables != null && serverVariables.size() > 0) {
+            if (serverVariables != null && !serverVariables.isEmpty()) {
                 server.setVariables(serverVariables);
             }
         }
@@ -586,7 +573,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             serverBindings.setExtensions(extensions);
         }
 
@@ -649,7 +636,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             serverVariable.setExtensions(extensions);
         }
 
@@ -792,7 +779,7 @@ public class AsyncAPIDeserializer {
         // ObjectNode itemsNode = getObject("description", node, false, location, result);
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             channelBinding.setExtensions(extensions);
         }
 
@@ -824,7 +811,7 @@ public class AsyncAPIDeserializer {
             }
 
             final Map<String, Object> extensions = getExtensions(node);
-            if (extensions != null && extensions.size() > 0) {
+            if (extensions != null && !extensions.isEmpty()) {
                 externalDocs.extensions(extensions);
             }
 
@@ -935,7 +922,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             info.setExtensions(extensions);
         }
 
@@ -946,7 +933,7 @@ public class AsyncAPIDeserializer {
         }
 
         final ArrayNode array = getArray("tags", node, false, location, result);
-        if (array != null && array.size() > 0) {
+        if (array != null && !array.isEmpty()) {
             info.setTags(getTagList(array, "tags", result));
         }
 
@@ -985,7 +972,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             license.setExtensions(extensions);
         }
 
@@ -1029,7 +1016,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             contact.setExtensions(extensions);
         }
 
@@ -1240,7 +1227,7 @@ public class AsyncAPIDeserializer {
 
         // private java.util.Map<String, Object> extensions = null;
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             parameter.setExtensions(extensions);
         }
 
@@ -1402,7 +1389,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             securityScheme.setExtensions(extensions);
         }
 
@@ -1544,7 +1531,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             message.setExtensions(extensions);
         }
 
@@ -1674,7 +1661,7 @@ public class AsyncAPIDeserializer {
         // examples [Map[string, any]] An array with examples of valid messageTrait objects.
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             messageTrait.setExtensions(extensions);
         }
 
@@ -1739,7 +1726,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             messageBindings.setExtensions(extensions);
         }
 
@@ -1765,7 +1752,7 @@ public class AsyncAPIDeserializer {
         final ObjectNode obj = getObject("headers", node, false, location, result);
         if (obj != null) {
             final Schema headers = getSchema(obj, String.format("%s.%s", location, "headers"), result);
-            if (headers.getType().equalsIgnoreCase("object") && headers.getProperties() != null && headers.getProperties().size() > 0) {
+            if (headers.getType().equalsIgnoreCase("object") && headers.getProperties() != null && !headers.getProperties().isEmpty()) {
                 messageBinding.setHeaders(headers);
             }
         }
@@ -1912,7 +1899,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             correlationID.setExtensions(extensions);
         }
 
@@ -1954,7 +1941,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             oAuthFlows.setExtensions(extensions);
         }
 
@@ -2021,7 +2008,7 @@ public class AsyncAPIDeserializer {
         oAuthFlow.setScopes(scope);
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             oAuthFlow.setExtensions(extensions);
         }
 
@@ -2260,7 +2247,7 @@ public class AsyncAPIDeserializer {
                     result.invalidType(location, "required", "string", n);
                 }
             }
-            if (requiredList.size() > 0) {
+            if (!requiredList.isEmpty()) {
                 schema.required(requiredList);
             }
         }
@@ -2312,9 +2299,9 @@ public class AsyncAPIDeserializer {
         }
 
         // private Map<String, Schema> properties = null;
-        final Map<String, Schema> properties = new LinkedHashMap<>();
+        final Map<String, Schema<Object>> properties = new LinkedHashMap<>();
         final ObjectNode propertiesObj = getObject("properties", node, false, location, result);
-        Schema property = null;
+        Schema<Object> property = null;
 
         final Set<String> keys = getKeys(propertiesObj);
         for (final String name : keys) {
@@ -2422,7 +2409,7 @@ public class AsyncAPIDeserializer {
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             schema.extensions(extensions);
         }
 
@@ -2587,26 +2574,31 @@ public class AsyncAPIDeserializer {
             operation.setExternalDocs(docs);
         }
 
-        // TODO verifier les operation binding si ils sont bien utilises car je doute
+        // TODO check the operation bindings if they are used correctly
         nodeObj = getObject("bindings", obj, false, location, result);
         final Map<String, OperationBinding> bindings = getOperationBindings(nodeObj, String.format("%s.%s", location, "bindings"), result, false);
-        if (bindings != null && bindings.size() > 0) {
+        if (bindings != null && !bindings.isEmpty()) {
             operation.setBindings(bindings);
         }
 
         array = getArray("traits", obj, false, location, result);
-        if (array != null && array.size() > 0) {
+        if (array != null && !array.isEmpty()) {
             operation.setTraits(getOperationTraitsList(array, "tags", result));
         }
 
-        ObjectNode objectNode = getObject("messages", obj, false, String.format("%s.%s", location, "messages"), result);
-        final Map<String, Message> messages = getMessages(objectNode, String.format("%s.%s", location, "messages"), result, false);
-        if (messages != null && !messages.isEmpty()) {
-            operation.setMessages(messages);
+        array = getArray("messages", obj, false, location, result);
+        if (array != null && !array.isEmpty()) {
+            operation.setMessages(getOperationMessagesList(array, location, result));
         }
 
+//        ObjectNode objectNode = getObject("messages", obj, false, String.format("%s.%s", location, "messages"), result);
+//        final Map<String, Message> messages = getMessages(objectNode, String.format("%s.%s", location, "messages"), result, false);
+//        if (messages != null && !messages.isEmpty()) {
+//            operation.setMessages(messages);
+//        }
+
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             operation.setExtensions(extensions);
         }
 
@@ -2700,15 +2692,15 @@ public class AsyncAPIDeserializer {
             operationTrait.setExternalDocs(docs);
         }
 
-        // TODO verifier les operation binding si ils sont bien utilises car je doute
+        // TODO check the operation bindings if they are used correctly
         objNode = getObject("bindings", obj, false, location, result);
         final Map<String, OperationBinding> bindings = getOperationBindings(objNode, String.format("%s.%s", location, "bindings"), result, false);
-        if (bindings != null && bindings.size() > 0) {
+        if (bindings != null && !bindings.isEmpty()) {
             operationTrait.setBindings(bindings);
         }
 
         final Map<String, Object> extensions = getExtensions(obj);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             operationTrait.setExtensions(extensions);
         }
 
@@ -2763,13 +2755,13 @@ public class AsyncAPIDeserializer {
                 operationBindings = getKafkaOperationBinding(node, String.format("%s.%s", location, operationBindingName), result);
                 break;
 
-            // TODO voir les differents formats qu'on va utiliser puis completer getOperationBinding
+            // TODO see the different formats that we will use then complete getOperationBinding
             default:
                 break;
         }
 
         final Map<String, Object> extensions = getExtensions(node);
-        if (extensions != null && extensions.size() > 0) {
+        if (extensions != null && !extensions.isEmpty()) {
             operationBindings.setExtensions(extensions);
         }
 
@@ -2791,15 +2783,15 @@ public class AsyncAPIDeserializer {
             result.invalidType(location, type, "string : request or response", node);
         }
 
-        /** When type is request, this is the HTTP method, otherwise it MUST be ignored. Its value MUST be one of GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, and TRACE.*/
+        // When type is request, this is the HTTP method, otherwise it MUST be ignored. Its value MUST be one of GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS, CONNECT, and TRACE.
         String value = getString("method", node, false, location, result);
 
-        // TODO confirmer que le contains marche sur la liste avec des strings
+        // TODO confirm that contains works on list with strings
         if (StringUtils.isNotBlank(value) && StringUtils.equalsIgnoreCase(type, REQUEST) && OPERATION_BINDING_HTTP_METHODE_VALUES.contains(value)) {
             operationBinding.setMethod(value);
         }
 
-        /** The version of this binding. If omitted, "latest" MUST be assumed. */
+        // The version of this binding. If omitted, "latest" MUST be assumed.
         value = getString("bindingVersion", node, false, location, result);
         if (StringUtils.isNotBlank(value)) {
             operationBinding.setBindingVersion(value);
@@ -2807,11 +2799,11 @@ public class AsyncAPIDeserializer {
             operationBinding.setBindingVersion(LATEST);
         }
 
-        /** A Schema object containing the definitions for each query parameter. This schema MUST be of type object and have a properties key. */
+        // A Schema object containing the definitions for each query parameter. This schema MUST be of type object and have a properties key. */
         final ObjectNode obj = getObject("query", node, false, location, result);
         if (obj != null) {
             final Schema query = getSchema(obj, String.format("%s.%s", location, "query"), result);
-            if (query.getType().equalsIgnoreCase("object") && query.getProperties() != null && query.getProperties().size() > 0) {
+            if (query.getType().equalsIgnoreCase("object") && query.getProperties() != null && !query.getProperties().isEmpty()) {
                 operationBinding.setQuery(query);
             }
         }
@@ -2832,7 +2824,7 @@ public class AsyncAPIDeserializer {
 
         final KafkaOperationBinding operationBinding = new KafkaOperationBinding();
 
-        /** Id of the consumer group. */
+        // Id of the consumer group.
         final JsonNode groupNode = node.get("groupId");
         Optional<Schema<?>> groupSchema;
         if(JsonNodeType.STRING.equals(Optional.ofNullable(groupNode).map(JsonNode::getNodeType).orElse(JsonNodeType.MISSING))) {
@@ -2845,7 +2837,7 @@ public class AsyncAPIDeserializer {
         groupSchema.ifPresent(operationBinding::setGroupId);
 
 
-        /** Id of the consumer group. */
+        // Id of the consumer group.
         final JsonNode clientNode = node.get("clientId");
         Optional<Schema<?>> clientSchema;
         if(JsonNodeType.STRING.equals(Optional.ofNullable(clientNode).map(JsonNode::getNodeType).orElse(JsonNodeType.MISSING))) {
@@ -2857,7 +2849,7 @@ public class AsyncAPIDeserializer {
         }
         clientSchema.ifPresent(operationBinding::setClientId);
 
-        /** The version of this binding. If omitted, "latest" MUST be assumed. */
+        // The version of this binding. If omitted, "latest" MUST be assumed.
         final String value = getString("bindingVersion", node, false, location, result);
         if (StringUtils.isNotBlank(value)) {
             operationBinding.setBindingVersion(value);
@@ -2892,7 +2884,25 @@ public class AsyncAPIDeserializer {
 
     }
 
-    // TODO je ne comprend pas le mapping par rapport a la spec pour SecurityRequirement
+    public List<Message> getOperationMessagesList(final ArrayNode nodes, final String location, final ParseResult result) {
+        if (nodes == null) {
+            return null;
+        }
+
+        final List<Message> operationMessages = new ArrayList<>();
+
+        for (final JsonNode node : nodes) {
+            if (node.getNodeType().equals(JsonNodeType.OBJECT)) {
+                final Message message = getMessage((ObjectNode) node, String.format("%s.%s", location, "operationMessage"), result);
+                operationMessages.add(message);
+            }
+        }
+
+        return operationMessages;
+
+    }
+
+    // TODO understand the mapping compared to the spec for SecurityRequirement
     // security scheme which is declared in the Security Schemes => mais dans les exemples ca correspond pas
 
     public SecurityRequirement<String> getSecurityRequirementsList(final ArrayNode nodes, final String location, final ParseResult result) {
@@ -2905,16 +2915,16 @@ public class AsyncAPIDeserializer {
         for (final JsonNode node : nodes) {
             if (node.getNodeType().equals(JsonNodeType.OBJECT)) {
                 final Set<String> keys = getKeys((ObjectNode) node);
-                if (keys.size() == 0) {
+                if (keys.isEmpty()) {
                 } else {
                     for (final String key : keys) {
                         if (key != null) {
                             final JsonNode value = node.get(key);
-                            if (key != null && JsonNodeType.ARRAY.equals(value.getNodeType())) {
+                            if (JsonNodeType.ARRAY.equals(value.getNodeType())) {
                                 final ArrayNode arrayNode = (ArrayNode) value;
                                 final List<String> scopes = Stream
                                                 .generate(arrayNode.elements()::next)
-                                                .map((n) -> n.asText())
+                                                .map(JsonNode::asText)
                                                 .limit(arrayNode.size())
                                                 .collect(Collectors.toList());
                                 securityRequirement.addList(scopes);
@@ -2930,7 +2940,7 @@ public class AsyncAPIDeserializer {
     }
 
     public String inferTypeFromArray(final ArrayNode an) {
-        if (an.size() == 0) {
+        if (an.isEmpty()) {
             return "string";
         }
         String type = null;
@@ -2956,7 +2966,7 @@ public class AsyncAPIDeserializer {
         return type;
     }
 
-    protected static class ParseResult {
+    public static class ParseResult {
 
         private boolean valid = true;
 
@@ -3017,37 +3027,37 @@ public class AsyncAPIDeserializer {
         public List<String> getParseMessages() {
             final List<String> messages = new ArrayList<String>();
             for (final Location l : this.extra.keySet()) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is unexpected";
                 messages.add(message);
             }
             for (final Location l : this.invalidType.keySet()) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is not of type `" + this.invalidType.get(l) + "`";
                 messages.add(message);
             }
             for (final Location l : this.missing) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is missing";
                 messages.add(message);
             }
             for (final Location l : this.warnings) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key;
                 messages.add(message);
             }
             for (final Location l : this.unsupported.keySet()) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is unsupported";
                 messages.add(message);
             }
             for (final Location l : this.unique) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is repeated";
                 messages.add(message);
             }
             for (final Location l : this.uniqueTags) {
-                final String location = l.location.equals("") ? "" : l.location + ".";
+                final String location = l.location.isEmpty() ? "" : l.location + ".";
                 final String message = "attribute " + location + l.key + " is repeated";
                 messages.add(message);
             }
@@ -3070,10 +3080,10 @@ public class AsyncAPIDeserializer {
 
             final Location location1 = (Location) o;
 
-            if (this.location != null ? !this.location.equals(location1.location) : location1.location != null) {
+            if (!Objects.equals(this.location, location1.location)) {
                 return false;
             }
-            return !(this.key != null ? !this.key.equals(location1.key) : location1.key != null);
+            return Objects.equals(this.key, location1.key);
 
         }
 

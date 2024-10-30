@@ -3,7 +3,6 @@ package com.arkea.asyncapi.v3.models.channels;
 import java.util.Map;
 
 import com.arkea.asyncapi.v3.models.messages.Message;
-import com.arkea.asyncapi.v3.models.operations.Operation;
 import com.arkea.asyncapi.v3.models.parameters.Parameter;
 
 /**
