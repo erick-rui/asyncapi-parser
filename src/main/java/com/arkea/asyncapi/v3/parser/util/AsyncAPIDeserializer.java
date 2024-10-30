@@ -481,11 +481,9 @@ public class AsyncAPIDeserializer {
             }
         }
 
-        // private SecurityRequirement security = null;
-        final ArrayNode docs = getArray("security", obj, false, location, result);
-        final SecurityRequirement<String> security = getSecurityRequirementsList(docs, String.format("%s.%s", location, "security"), result);
-        if (security != null) {
-            server.setSecurity(security);
+        ArrayNode array = getArray("security", obj, false, location, result);
+        if (array != null && !array.isEmpty()) {
+            server.setSecurity(getSecuritySchemaList(array, location, result));
         }
 
         final Set<String> keys = getKeys(obj);
@@ -2902,40 +2900,22 @@ public class AsyncAPIDeserializer {
 
     }
 
-    // TODO understand the mapping compared to the spec for SecurityRequirement
-    // security scheme which is declared in the Security Schemes => mais dans les exemples ca correspond pas
 
-    public SecurityRequirement<String> getSecurityRequirementsList(final ArrayNode nodes, final String location, final ParseResult result) {
+    public List<SecurityScheme> getSecuritySchemaList(final ArrayNode nodes, final String location, final ParseResult result) {
         if (nodes == null) {
             return null;
         }
 
-        final SecurityRequirement<String> securityRequirement = new SecurityRequirement<>();
+        final List<SecurityScheme> securitySchemes = new ArrayList<>();
 
         for (final JsonNode node : nodes) {
             if (node.getNodeType().equals(JsonNodeType.OBJECT)) {
-                final Set<String> keys = getKeys((ObjectNode) node);
-                if (keys.isEmpty()) {
-                } else {
-                    for (final String key : keys) {
-                        if (key != null) {
-                            final JsonNode value = node.get(key);
-                            if (JsonNodeType.ARRAY.equals(value.getNodeType())) {
-                                final ArrayNode arrayNode = (ArrayNode) value;
-                                final List<String> scopes = Stream
-                                                .generate(arrayNode.elements()::next)
-                                                .map(JsonNode::asText)
-                                                .limit(arrayNode.size())
-                                                .collect(Collectors.toList());
-                                securityRequirement.addList(scopes);
-                            }
-                        }
-                    }
-                }
+                final SecurityScheme security = getSecurityScheme((ObjectNode) node, String.format("%s.%s", location, "security"), result);
+                securitySchemes.add(security);
             }
         }
 
-        return securityRequirement;
+        return securitySchemes;
 
     }
 

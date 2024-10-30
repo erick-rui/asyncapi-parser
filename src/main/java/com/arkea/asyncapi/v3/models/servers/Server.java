@@ -1,9 +1,10 @@
 package com.arkea.asyncapi.v3.models.servers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.arkea.asyncapi.v3.models.security.SecurityRequirement;
+import com.arkea.asyncapi.v3.models.security.SecurityScheme;
 
 /**
  * Server
@@ -35,10 +36,10 @@ public class Server {
     /** A map between a variable name and its value. The value is used for substitution in the server's URL template. */
     private Map<String, ServerVariable> variables = null;
 
-    /** A declaration of which security mechanisms can be used with this server.
-     *  The list of values includes alternative security requirement objects that can be used.
-     *   Only one of the security requirement objects need to be satisfied to authorize a connection or operation. */
-    private SecurityRequirement<String> security = null;
+    /** A declaration of which security schemes can be used with this server.
+     * The list of values includes alternative security scheme objects that can be used.
+     * Only one of the security scheme objects need to be satisfied to authorize a connection or operation. */
+    private List<SecurityScheme> security = null;
 
     /** A map where the keys describe the name of the protocol and the values describe protocol-specific definitions for the server. */
     private Map<String, ServerBinding> bindings = null;
@@ -63,11 +64,11 @@ public class Server {
         this.protocolVersion = protocolVersion;
     }
 
-    public SecurityRequirement<String> getSecurity() {
+    public List<SecurityScheme> getSecurity() {
         return this.security;
     }
 
-    public void setSecurity(final SecurityRequirement<String> security) {
+    public void setSecurity(final List<SecurityScheme> security) {
         this.security = security;
     }
 

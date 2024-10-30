@@ -33,12 +33,7 @@ servers:
           - '1883'
           - '8883'
     security:
-      - apiKey: []
-      - supportedOauthFlows:
-        - streetlights:on
-        - streetlights:off
-        - streetlights:dim
-      - openIdConnectWellKnown: []
+      - $ref: "#/components/securitySchemes/supportedOauthFlows"
 
 defaultContentType: application/json
 

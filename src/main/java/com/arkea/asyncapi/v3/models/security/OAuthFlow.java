@@ -16,6 +16,7 @@ public class OAuthFlow {
 
     private String refreshUrl = null;
 
+    // TODO: move to security schema object
     private Scopes scopes = null;
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
