@@ -90,7 +90,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> CORRELATION_ID_KEYS = new LinkedHashSet<>(Arrays.asList("description", "location", "extensions"));
 
-    protected static Set<String> SECURITY_SCHEME_KEYS = new LinkedHashSet<>(Arrays.asList("type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl", "extensions"));
+    protected static Set<String> SECURITY_SCHEME_KEYS = new LinkedHashSet<>(Arrays.asList("type", "description", "name", "in", "scheme", "bearerFormat", "flows", "openIdConnectUrl", "scopes", "extensions"));
 
     protected static Set<String> EXTERNAL_DOCS_KEYS = new LinkedHashSet<>(Arrays.asList("description", "url", "extensions"));
 
@@ -105,7 +105,7 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> OAUTHFLOWS_KEYS = new LinkedHashSet<>(Arrays.asList("implicit", "password", "clientCredentials", "authorizationCode", "extensions"));
 
-    protected static Set<String> OAUTHFLOW_KEYS = new LinkedHashSet<>(Arrays.asList("authorizationUrl", "tokenUrl", "refreshUrl", "scopes", "extensions"));
+    protected static Set<String> OAUTHFLOW_KEYS = new LinkedHashSet<>(Arrays.asList("authorizationUrl", "tokenUrl", "refreshUrl", "availableScopes", "extensions"));
 
     protected static List<String> OPERATION_BINDING_HTTP_METHODE_VALUES = Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "CONNECT", "TRACE");
 
@@ -1274,6 +1274,22 @@ public class AsyncAPIDeserializer {
         return null;
     }
 
+    public List<String> getScopesList(final ArrayNode obj, final String location, final ParseResult result) {
+        if (obj == null) {
+            return null;
+        }
+        final List<String> scopes = new ArrayList<>();
+        for (final JsonNode item : obj) {
+            if (item.getNodeType().equals(JsonNodeType.STRING)) {
+                final String scope = item.textValue();
+                if (scope != null) {
+                    scopes.add(scope);
+                }
+            }
+        }
+        return scopes;
+    }
+
     public Map<String, SecurityScheme> getSecuritySchemes(final ObjectNode obj, final String location, final ParseResult result, final boolean underComponents) {
         if (obj == null) {
             return null;
@@ -1384,6 +1400,12 @@ public class AsyncAPIDeserializer {
         value = getString("openIdConnectUrl", node, openIdConnectRequired, location, result);
         if (StringUtils.isNotBlank(value)) {
             securityScheme.setOpenIdConnectUrl(value);
+        }
+
+        final ArrayNode array = getArray("scopes", node, false, location, result);
+        final List<String> scopes = getScopesList(array, String.format("%s.%s", location, "scopes"), result);
+        if (scopes != null) {
+            securityScheme.setScopes(scopes);
         }
 
         final Map<String, Object> extensions = getExtensions(node);
@@ -1815,12 +1837,12 @@ public class AsyncAPIDeserializer {
                     // JsonNode value = node.get(key);
                     // if (key != null && JsonNodeType.ARRAY.equals(value.getNodeType())) {
                     // ArrayNode arrayNode = (ArrayNode) value;
-                    // List<String> scopes = Stream
+                    // List<String> availableScopes = Stream
                     // .generate(arrayNode.elements()::next)
                     // .map((n) -> n.asText())
                     // .limit(arrayNode.size())
                     // .collect(Collectors.toList());
-                    // operationTrait.addList(key, scopes);
+                    // operationTrait.addList(key, availableScopes);
                     // }
                     // }
                     // }
@@ -1960,9 +1982,9 @@ public class AsyncAPIDeserializer {
 
         final OAuthFlow oAuthFlow = new OAuthFlow();
 
-        boolean authorizationUrlRequired, tokenUrlRequired, refreshUrlRequired, scopesRequired;
+        boolean authorizationUrlRequired, tokenUrlRequired, refreshUrlRequired, availableScopesRequired;
         authorizationUrlRequired = tokenUrlRequired = refreshUrlRequired = false;
-        scopesRequired = true;
+        availableScopesRequired = true;
         switch (oAuthFlowType) {
             case "implicit":
                 authorizationUrlRequired = true;
@@ -1993,17 +2015,17 @@ public class AsyncAPIDeserializer {
             oAuthFlow.setRefreshUrl(value);
         }
 
-        final ObjectNode scopesObject = getObject("scopes", node, scopesRequired, location, result);
+        final ObjectNode availableScopesObject = getObject("availableScopes", node, availableScopesRequired, location, result);
 
-        final Scopes scope = new Scopes();
-        final Set<String> keys = getKeys(scopesObject);
+        final Scopes availableScopes = new Scopes();
+        final Set<String> keys = getKeys(availableScopesObject);
         for (final String name : keys) {
-            final JsonNode scopeValue = scopesObject.get(name);
-            if (scopesObject != null) {
-                scope.addString(name, scopeValue.asText());
+            final JsonNode scopeValue = availableScopesObject.get(name);
+            if (availableScopesObject != null) {
+                availableScopes.addString(name, scopeValue.asText());
             }
         }
-        oAuthFlow.setScopes(scope);
+        oAuthFlow.setAvailableScopes(availableScopes);
 
         final Map<String, Object> extensions = getExtensions(node);
         if (extensions != null && !extensions.isEmpty()) {

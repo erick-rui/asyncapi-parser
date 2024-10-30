@@ -183,19 +183,19 @@ components:
       flows:
         implicit:
           authorizationUrl: 'https://authserver.example/auth'
-          scopes:
+          availableScopes:
             'streetlights:on': Ability to switch lights on
             'streetlights:off': Ability to switch lights off
             'streetlights:dim': Ability to dim the lights
         password:
           tokenUrl: 'https://authserver.example/token'
-          scopes:
+          availableScopes:
             'streetlights:on': Ability to switch lights on
             'streetlights:off': Ability to switch lights off
             'streetlights:dim': Ability to dim the lights
         clientCredentials:
           tokenUrl: 'https://authserver.example/token'
-          scopes:
+          availableScopes:
             'streetlights:on': Ability to switch lights on
             'streetlights:off': Ability to switch lights off
             'streetlights:dim': Ability to dim the lights
@@ -203,10 +203,14 @@ components:
           authorizationUrl: 'https://authserver.example/auth'
           tokenUrl: 'https://authserver.example/token'
           refreshUrl: 'https://authserver.example/refresh'
-          scopes:
+          availableScopes:
             'streetlights:on': Ability to switch lights on
             'streetlights:off': Ability to switch lights off
             'streetlights:dim': Ability to dim the lights
+      scopes:
+        - 'streetlights:on'
+        - 'streetlights:off'
+        - 'streetlights:dim'
     openIdConnectWellKnown:
       type: openIdConnect
       openIdConnectUrl: 'https://authserver.example/.well-known'

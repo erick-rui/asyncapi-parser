@@ -2,6 +2,8 @@ package com.arkea.asyncapi.v3.models.security;
 
 import org.apache.commons.lang3.EnumUtils;
 
+import java.util.List;
+
 /**
  * SecurityScheme
  *
@@ -72,6 +74,8 @@ public class SecurityScheme {
     private OAuthFlows flows = null;
 
     private String openIdConnectUrl = null;
+
+    private List<String> scopes = null;
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
@@ -252,6 +256,25 @@ public class SecurityScheme {
         return this;
     }
 
+    /**
+     * returns the scopes property from a SecurityScheme instance.
+     *
+     * @return List<String> scopes
+     **/
+
+    public List<String> getScopes() {
+        return this.scopes;
+    }
+
+    public void setScopes(final List<String> scopes) {
+        this.scopes = scopes;
+    }
+
+    public SecurityScheme scopes(final List<String> scopes) {
+        this.scopes = scopes;
+        return this;
+    }
+
     public java.util.Map<String, Object> getExtensions() {
         return this.extensions;
     }
@@ -310,6 +333,10 @@ public class SecurityScheme {
         if (this.openIdConnectUrl != null ? !this.openIdConnectUrl.equals(that.openIdConnectUrl) : that.openIdConnectUrl != null) {
             return false;
         }
+
+        if (this.scopes != null ? !this.scopes.equals(that.scopes) : that.scopes != null) {
+            return false;
+        }
         return this.extensions != null ? this.extensions.equals(that.extensions) : that.extensions == null;
     }
 
@@ -323,6 +350,7 @@ public class SecurityScheme {
         result = 31 * result + (this.bearerFormat != null ? this.bearerFormat.hashCode() : 0);
         result = 31 * result + (this.flows != null ? this.flows.hashCode() : 0);
         result = 31 * result + (this.openIdConnectUrl != null ? this.openIdConnectUrl.hashCode() : 0);
+        result = 31 * result + (this.scopes != null ? this.scopes.hashCode() : 0);
         result = 31 * result + (this.extensions != null ? this.extensions.hashCode() : 0);
         return result;
     }
@@ -340,6 +368,7 @@ public class SecurityScheme {
         sb.append("    bearerFormat: ").append(toIndentedString(this.bearerFormat)).append("\n");
         sb.append("    flows: ").append(toIndentedString(this.flows)).append("\n");
         sb.append("    openIdConnectUrl: ").append(toIndentedString(this.openIdConnectUrl)).append("\n");
+        sb.append("    scopes: ").append(toIndentedString(this.scopes)).append("\n");
         sb.append("}");
         return sb.toString();
     }

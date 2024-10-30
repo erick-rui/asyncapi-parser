@@ -17,7 +17,7 @@ public class OAuthFlow {
     private String refreshUrl = null;
 
     // TODO: move to security schema object
-    private Scopes scopes = null;
+    private Scopes availableScopes = null;
 
     /** Allows extensions to the AsyncAPI Schema. The field name MUST begin with x-, for example, x-internal-id.
      *  The value can be null, a primitive, an array or an object. Can have any valid JSON format value. */
@@ -86,16 +86,16 @@ public class OAuthFlow {
      * @return Scopes scopes
      **/
 
-    public Scopes getScopes() {
-        return this.scopes;
+    public Scopes getAvailableScopes() {
+        return this.availableScopes;
     }
 
-    public void setScopes(final Scopes scopes) {
-        this.scopes = scopes;
+    public void setAvailableScopes(final Scopes availableScopes) {
+        this.availableScopes = availableScopes;
     }
 
-    public OAuthFlow scopes(final Scopes scopes) {
-        this.scopes = scopes;
+    public OAuthFlow availableScopes(final Scopes availableScopes) {
+        this.availableScopes = availableScopes;
         return this;
     }
 
@@ -111,13 +111,13 @@ public class OAuthFlow {
         return Objects.equals(this.authorizationUrl, oauthFlow.authorizationUrl) &&
                         Objects.equals(this.tokenUrl, oauthFlow.tokenUrl) &&
                         Objects.equals(this.refreshUrl, oauthFlow.refreshUrl) &&
-                        Objects.equals(this.scopes, oauthFlow.scopes) &&
+                        Objects.equals(this.availableScopes, oauthFlow.availableScopes) &&
                         Objects.equals(this.extensions, oauthFlow.extensions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.authorizationUrl, this.tokenUrl, this.refreshUrl, this.scopes, this.extensions);
+        return Objects.hash(this.authorizationUrl, this.tokenUrl, this.refreshUrl, this.availableScopes, this.extensions);
     }
 
     public java.util.Map<String, Object> getExtensions() {
@@ -151,7 +151,7 @@ public class OAuthFlow {
         sb.append("    authorizationUrl: ").append(toIndentedString(this.authorizationUrl)).append("\n");
         sb.append("    tokenUrl: ").append(toIndentedString(this.tokenUrl)).append("\n");
         sb.append("    refreshUrl: ").append(toIndentedString(this.refreshUrl)).append("\n");
-        sb.append("    scopes: ").append(toIndentedString(this.scopes)).append("\n");
+        sb.append("    scopes: ").append(toIndentedString(this.availableScopes)).append("\n");
         sb.append("}");
         return sb.toString();
     }
