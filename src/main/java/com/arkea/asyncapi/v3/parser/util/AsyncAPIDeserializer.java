@@ -96,6 +96,8 @@ public class AsyncAPIDeserializer {
 
     protected static Set<String> COMPONENTS_KEYS = new LinkedHashSet<>(Arrays.asList("schemas", "messages", "securitySchemes", "parameters", "correlationIds", "operationTraits", "messageTraits", "serverBindings", "channelBindings", "operationBindings", "messageBindings", "extensions"));
 
+    protected static Set<String> MULTI_FORMAT_SCHEMA_KEYS = new LinkedHashSet<>(Arrays.asList("schemaFormat", "schema"));
+
     protected static Set<String> SCHEMA_KEYS = new LinkedHashSet<>(Arrays.asList("$ref", "default", "title", "type", "required", "multipleOf", "maximum", "exclusiveMaximum", "minimum", "exclusiveMinimum", "maxLength", "minLength", "pattern", "maxItems", "minItems", "uniqueItems", "maxProperties",
                     "minProperties", "enum", "example", "readOnly", "writeOnly",
                     "allOf", "oneOf", "anyOf", "items", "nullable",
@@ -1476,12 +1478,12 @@ public class AsyncAPIDeserializer {
             }
         }
 
-        String value = getString("schemaFormat", node, false, String.format("%s.%s", location, "schemaFormat"), result);
-        if (StringUtils.isNotBlank(value)) {
-            message.setSchemaFormat(value);
-        }
+//        String value = getString("schemaFormat", node, false, String.format("%s.%s", location, "schemaFormat"), result);
+//        if (StringUtils.isNotBlank(value)) {
+//            message.setSchemaFormat(value);
+//        }
 
-        value = getString("contentType", node, false, String.format("%s.%s", location, "contentType"), result);
+        String value = getString("contentType", node, false, String.format("%s.%s", location, "contentType"), result);
         if (StringUtils.isNotBlank(value)) {
             message.setContentType(value);
         }
@@ -1513,9 +1515,8 @@ public class AsyncAPIDeserializer {
 
         final ObjectNode payloadObject = getObject("payload", node, false, String.format("%s.%s", location, "payload"), result);
         if (payloadObject != null) {
-
             // TODO !!!!!!!!!!!!!!! attention payload formate en schema pour le moment !!!!!!!!!!!!!!!
-            message.setPayload(getSchema(payloadObject, String.format("%s.%s", location, "payload"), result));
+            message.setPayload(getPayload(payloadObject, String.format("%s.%s", location, "payload"), result));
         }
 
         final ObjectNode correlationIdObject = getObject("correlationId", node, false, String.format("%s.%s", location, "correlationId"), result);
@@ -2069,6 +2070,42 @@ public class AsyncAPIDeserializer {
         }
 
         return schemas;
+    }
+
+    public Object getPayload(final ObjectNode node, final String location, final ParseResult result) {
+        // needs to return a Multi Format Schema Object / Schema Object / Reference Object
+        Object Payload = null;
+
+        final Set<String> keys = getKeys(node);
+        if (keys.containsAll(MULTI_FORMAT_SCHEMA_KEYS)){
+            Payload = getMultiFormatSchema(node, location, result);
+        } else {
+            Payload = getSchema(node, location, result);
+        }
+
+        return Payload;
+    }
+
+    public MultiFormatSchema getMultiFormatSchema(final ObjectNode node, final String location, final ParseResult result){
+        if (node == null) {
+            return null;
+        }
+
+        MultiFormatSchema multiFormatSchema = new MultiFormatSchema();
+
+        final String value = getString("schemaFormat", node, false, location, result);
+        if (StringUtils.isNotBlank(value)) {
+            multiFormatSchema.setSchemaFormat(value);
+        }
+
+        final ObjectNode schemaObbject = getObject("schema", node, false, String.format("%s.%s", location, "schema"), result);
+        if (schemaObbject != null) {
+            final Schema schema = getSchema(schemaObbject, location, result);
+            multiFormatSchema.setSchema(schema);
+        }
+
+        return multiFormatSchema;
+
     }
 
     public Schema getSchema(final ObjectNode node, final String location, final ParseResult result) {

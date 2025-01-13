@@ -23,13 +23,6 @@ public class Message {
     /** Definition of the correlation ID used for message tracing or matching. */
     private CorrelationID correlationId = null;
 
-    /** A string containing the name of the schema format used to define the message payload.
-     * If omitted, implementations should parse the payload as a Schema object.
-     * Check out the supported schema formats table for more information.
-     * Custom values are allowed but their implementation is OPTIONAL.
-     * A custom value MUST NOT refer to one of the schema formats listed in the table. */
-    private String schemaFormat = null;
-
     /**	The content type to use when encoding/decoding a message's payload. The value MUST be a specific media type (e.g. application/json). When omitted, the value MUST be the one specified on the defaultContentType field. */
     private String contentType = null;
 
@@ -91,14 +84,6 @@ public class Message {
 
     public void setCorrelationId(final CorrelationID correlationId) {
         this.correlationId = correlationId;
-    }
-
-    public String getSchemaFormat() {
-        return this.schemaFormat;
-    }
-
-    public void setSchemaFormat(final String schemaFormat) {
-        this.schemaFormat = schemaFormat;
     }
 
     public String getContentType() {
@@ -218,7 +203,6 @@ public class Message {
         result = prime * result + (this.headers == null ? 0 : this.headers.hashCode());
         result = prime * result + (this.name == null ? 0 : this.name.hashCode());
         result = prime * result + (this.payload == null ? 0 : this.payload.hashCode());
-        result = prime * result + (this.schemaFormat == null ? 0 : this.schemaFormat.hashCode());
         result = prime * result + (this.summary == null ? 0 : this.summary.hashCode());
         result = prime * result + (this.tags == null ? 0 : this.tags.hashCode());
         result = prime * result + (this.title == null ? 0 : this.title.hashCode());
@@ -308,13 +292,6 @@ public class Message {
         } else if (!this.payload.equals(other.payload)) {
             return false;
         }
-        if (this.schemaFormat == null) {
-            if (other.schemaFormat != null) {
-                return false;
-            }
-        } else if (!this.schemaFormat.equals(other.schemaFormat)) {
-            return false;
-        }
         if (this.summary == null) {
             if (other.summary != null) {
                 return false;
@@ -348,9 +325,20 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message [headers=" + this.headers + ", payload=" + this.payload + ", correlationId=" + this.correlationId + ", schemaFormat=" + this.schemaFormat + ", contentType=" + this.contentType + ", name=" + this.name + ", title=" + this.title + ", summary=" + this.summary + ", description="
-                        + this.description + ", tags=" + this.tags
-                        + ", externalDocs=" + this.externalDocs + ", bindings=" + this.bindings + ", traits=" + this.traits + ", extensions=" + this.extensions + ", $ref=" + this.$ref + "]";
+        return "Message [headers=" + this.headers
+                + ", payload=" + this.payload
+                + ", correlationId=" + this.correlationId
+                + ", contentType=" + this.contentType
+                + ", name=" + this.name
+                + ", title=" + this.title
+                + ", summary=" + this.summary
+                + ", description=" + this.description
+                + ", tags=" + this.tags
+                + ", externalDocs=" + this.externalDocs
+                + ", bindings=" + this.bindings
+                + ", traits=" + this.traits
+                + ", extensions=" + this.extensions
+                + ", $ref=" + this.$ref + "]";
     }
 
 }
